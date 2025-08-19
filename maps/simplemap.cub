@@ -1,0 +1,11 @@
+F 220,100,0
+NO ./north.xpm
+SO ./south.xpm
+C 225,30,0
+WE ./west.xpm
+EA ./east.xpm
+
+111111
+100001
+1000N1
+111111
