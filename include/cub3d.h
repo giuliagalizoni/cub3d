@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: your_login <your_login@student.42.fr>      +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/01 00:00:00 by your_login       #+#    #+#             */
-/*   Updated: 2024/01/01 00:00:00 by your_login      ###   ########.fr       */
+/*   Created: 2025/08/21 18:38:23 by shutan            #+#    #+#             */
+/*   Updated: 2025/08/21 18:38:25 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef CUB3D_H
 # define CUB3D_H
