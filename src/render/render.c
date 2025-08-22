@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:23:08 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/22 06:50:26 by shutan           ###   ########.fr       */
+/*   Updated: 2025/08/22 15:47:49 by giuliagaliz      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	draw_floor_ceiling(t_game *game)
 		x = 0;
 		while (x < WIN_WIDTH)
 		{
-			put_pixel(&game->screen, x, y, game->ceiling_color);
+			put_pixel(&game->screen, x, y, game->textures->C);
 			x++;
 		}
 		y++;
@@ -76,7 +76,7 @@ void	draw_floor_ceiling(t_game *game)
 		x = 0;
 		while (x < WIN_WIDTH)
 		{
-			put_pixel(&game->screen, x, y, game->floor_color);
+			put_pixel(&game->screen, x, y, game->textures->F);
 			x++;
 		}
 		y++;

@@ -87,6 +87,7 @@ typedef struct s_game
 
 /*Function prototypes - Parsing*/
 void	parser(char *path, t_game *game);
+void	read_cub(char *path, t_game *game);
 
 /* Function prototypes - Window management */
 int		init_window(t_game *game);
