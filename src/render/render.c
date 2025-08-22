@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:23:08 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/21 18:40:16 by shutan           ###   ########.fr       */
+/*   Updated: 2025/08/22 06:50:26 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ void	put_pixel(t_img *img, int x, int y, int color)
 
 	if (x >= 0 && x < WIN_WIDTH && y >= 0 && y < WIN_HEIGHT)
 	{
-		dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+		dst = img->addr + (y * img->line_length + x
+				* (img->bits_per_pixel / 8));
 		*(unsigned int *)dst = color;
 	}
 }
