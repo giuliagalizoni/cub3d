@@ -1,4 +1,4 @@
-#include "../../includes/cub3d.h"
+#include "../../include/cub3d.h"
 
 int	is_equal(char *str1, char *str2)
 {
@@ -87,8 +87,6 @@ void	parser(char *path, t_game *game)
 		return ; // figure out exit and error printing
 	}
 	read_cub(path, game);
-
-
 
 }
 

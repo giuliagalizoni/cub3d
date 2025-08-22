@@ -2,17 +2,20 @@
 
 void	init(t_game *game)
 {
-	game->mlx = NULL;
-	game->win = NULL;
-	game->player = NULL;
+	game->player = malloc(sizeof(t_player));
+	if (!game->player)
+		return ; // error handling
 	game->textures = malloc(sizeof(t_textures));
-    if (!game->textures)
-        return ; // error handling
-    game->textures->NO = NULL;
-    game->textures->SO = NULL;
-    game->textures->WE = NULL;
-    game->textures->EA = NULL;
-	game->map = NULL;
+	if (!game->textures)
+		return ; // error handling
+	game->textures->NO = NULL;
+	game->textures->SO = NULL;
+	game->textures->WE = NULL;
+	game->textures->EA = NULL;
+	game->map = malloc(sizeof(t_map));
+	if (!game->map)
+		return ; // error handling
+	game->map->arr = NULL;
 }
 
 /* Initialize game with test map */
