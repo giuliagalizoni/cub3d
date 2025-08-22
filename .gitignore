@@ -1,5 +1,19 @@
+# Compiled files
+cub3D
 *.o
 *.a
-cub3d
 
-.vscode
+# Object directories
+obj/
+
+# macOS
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+
+# Temporary files
+*~
+*.swp
+*.swo
