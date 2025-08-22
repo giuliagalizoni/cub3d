@@ -1,3 +1,3 @@
 test:
-	make -C libft && cc -Wall -Wextra -Werror src/*.c -Llibft -lft -o cub3d
+	make -C libft && gcc -g -Wall -Wextra -Werror src/*.c src/parsing/*.c -Llibft -lft -o cub3d
 
