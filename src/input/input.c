@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:38:51 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/21 18:40:16 by shutan           ###   ########.fr       */
+/*   Updated: 2025/08/22 12:09:42 by giuliagaliz      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ void	move_forward(t_game *game)
 	double	new_x;
 	double	new_y;
 
-	new_x = game->player.x + game->player.dx * 0.1;
-	new_y = game->player.y + game->player.dy * 0.1;
+	new_x = game->player->x + game->player->dx * 0.1;
+	new_y = game->player->y + game->player->dy * 0.1;
 	if (is_valid_position(game, new_x, new_y))
 	{
-		game->player.x = new_x;
-		game->player.y = new_y;
+		game->player->x = new_x;
+		game->player->y = new_y;
 	}
 }
 
@@ -53,21 +53,21 @@ void	move_backward(t_game *game)
 	double	new_x;
 	double	new_y;
 
-	new_x = game->player.x - game->player.dx * 0.1;
-	new_y = game->player.y - game->player.dy * 0.1;
+	new_x = game->player->x - game->player->dx * 0.1;
+	new_y = game->player->y - game->player->dy * 0.1;
 	if (is_valid_position(game, new_x, new_y))
 	{
-		game->player.x = new_x;
-		game->player.y = new_y;
+		game->player->x = new_x;
+		game->player->y = new_y;
 	}
 }
 
 /* Rotate player view to the left */
 void	rotate_left(t_game *game)
 {
-	game->player.angle -= 0.1;
-	if (game->player.angle < 0)
-		game->player.angle += 2 * PI;
-	game->player.dx = cos(game->player.angle);
-	game->player.dy = sin(game->player.angle);
+	game->player->angle -= 0.1;
+	if (game->player->angle < 0)
+		game->player->angle += 2 * PI;
+	game->player->dx = cos(game->player->angle);
+	game->player->dy = sin(game->player->angle);
 }

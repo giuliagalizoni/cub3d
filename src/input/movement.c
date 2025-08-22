@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:38:59 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/22 06:02:29 by shutan           ###   ########.fr       */
+/*   Updated: 2025/08/22 12:11:31 by giuliagaliz      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ void	move_left(t_game *game)
 	double	new_x;
 	double	new_y;
 
-	new_x = game->player.x + game->player.dy * 0.1;
-	new_y = game->player.y - game->player.dx * 0.1;
+	new_x = game->player->x + game->player->dy * 0.1;
+	new_y = game->player->y - game->player->dx * 0.1;
 	if (is_valid_position(game, new_x, new_y))
 	{
-		game->player.x = new_x;
-		game->player.y = new_y;
+		game->player->x = new_x;
+		game->player->y = new_y;
 	}
 }
 
@@ -33,23 +33,23 @@ void	move_right(t_game *game)
 	double	new_x;
 	double	new_y;
 
-	new_x = game->player.x - game->player.dy * 0.1;
-	new_y = game->player.y + game->player.dx * 0.1;
+	new_x = game->player->x - game->player->dy * 0.1;
+	new_y = game->player->y + game->player->dx * 0.1;
 	if (is_valid_position(game, new_x, new_y))
 	{
-		game->player.x = new_x;
-		game->player.y = new_y;
+		game->player->x = new_x;
+		game->player->y = new_y;
 	}
 }
 
 /* Rotate player view to the right */
 void	rotate_right(t_game *game)
 {
-	game->player.angle += 0.1;
-	if (game->player.angle >= 2 * PI)
-		game->player.angle -= 2 * PI;
-	game->player.dx = cos(game->player.angle);
-	game->player.dy = sin(game->player.angle);
+	game->player->angle += 0.1;
+	if (game->player->angle >= 2 * PI)
+		game->player->angle -= 2 * PI;
+	game->player->dx = cos(game->player->angle);
+	game->player->dy = sin(game->player->angle);
 }
 
 /* Check if position is valid (not a wall) */
@@ -60,11 +60,11 @@ int	is_valid_position(t_game *game, double x, double y)
 
 	map_x = (int)x;
 	map_y = (int)y;
-	if (map_x < 0 || map_x >= game->map_width)
+	if (map_x < 0 || map_x >= game->map->width)
 		return (0);
-	if (map_y < 0 || map_y >= game->map_height)
+	if (map_y < 0 || map_y >= game->map->height)
 		return (0);
-	if (game->map[map_y][map_x] == '1')
+	if (game->map->arr[map_y][map_x] == '1')
 		return (0);
 	return (1);
 }

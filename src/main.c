@@ -31,9 +31,9 @@ void	init_test_game(t_game *game)
 		NULL
 	};
 
-	game->map = test_map;
-	game->map_width = 9;
-	game->map_height = 9;
+	game->map->arr = test_map;
+	game->map->width = 9;
+	game->map->height = 9;
 	init_player(game, 3, 4, 'N');
 	set_default_colors(game);
 }

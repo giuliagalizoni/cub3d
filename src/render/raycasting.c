@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:39:11 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/21 18:40:16 by shutan           ###   ########.fr       */
+/*   Updated: 2025/08/22 12:04:04 by giuliagaliz      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ double	calculate_ray_angle(t_game *game, int x)
 	double	ray_angle;
 
 	camera_x = 2 * x / (double)WIN_WIDTH - 1;
-	ray_angle = game->player.angle + atan(camera_x * tan(FOV * DR / 2));
+	ray_angle = game->player->angle + atan(camera_x * tan(FOV * DR / 2));
 	return (ray_angle);
 }
 
@@ -51,8 +51,8 @@ double	cast_single_ray(t_game *game, double ray_angle)
 	double	dy;
 	double	distance;
 
-	ray_x = game->player.x;
-	ray_y = game->player.y;
+	ray_x = game->player->x;
+	ray_y = game->player->y;
 	dx = cos(ray_angle) * 0.01;
 	dy = sin(ray_angle) * 0.01;
 	distance = 0;
@@ -62,7 +62,7 @@ double	cast_single_ray(t_game *game, double ray_angle)
 		ray_y += dy;
 		distance += 0.01;
 	}
-	return (distance * cos(ray_angle - game->player.angle));
+	return (distance * cos(ray_angle - game->player->angle));
 }
 
 /* Calculate wall height based on distance */

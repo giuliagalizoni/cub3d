@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wall_drawing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 06:48:28 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/22 06:48:30 by shutan           ###   ########.fr       */
+/*   Updated: 2025/08/22 12:07:08 by giuliagaliz      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ void	draw_wall_slice(t_game *game, int x, double wall_height)
 /* Check if coordinate is a wall */
 int	is_wall(t_game *game, int x, int y)
 {
-	if (x < 0 || x >= game->map_width)
+	if (x < 0 || x >= game->map->width)
 		return (1);
-	if (y < 0 || y >= game->map_height)
+	if (y < 0 || y >= game->map->height)
 		return (1);
-	if (game->map[y][x] == '1')
+	if (game->map->arr[y][x] == '1')
 		return (1);
 	return (0);
 }
@@ -50,18 +50,18 @@ int	is_wall(t_game *game, int x, int y)
 /* Initialize player position and direction */
 void	init_player(t_game *game, double x, double y, char direction)
 {
-	game->player.x = x + 0.5;
-	game->player.y = y + 0.5;
+	game->player->x = x + 0.5;
+	game->player->y = y + 0.5;
 	if (direction == 'N')
-		game->player.angle = 3 * PI / 2;
+		game->player->angle = 3 * PI / 2;
 	else if (direction == 'S')
-		game->player.angle = PI / 2;
+		game->player->angle = PI / 2;
 	else if (direction == 'E')
-		game->player.angle = 0;
+		game->player->angle = 0;
 	else if (direction == 'W')
-		game->player.angle = PI;
-	game->player.dx = cos(game->player.angle);
-	game->player.dy = sin(game->player.angle);
+		game->player->angle = PI;
+	game->player->dx = cos(game->player->angle);
+	game->player->dy = sin(game->player->angle);
 }
 
 /* Set default floor and ceiling colors */

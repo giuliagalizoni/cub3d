@@ -61,6 +61,7 @@ typedef struct s_textures {
 	char *EA;
 	int    F; // bitwise or make a separate struct for rgb
 	int    C;
+	t_img		imgs[4];
 } t_textures;
 
 typedef struct s_map {
@@ -76,12 +77,10 @@ typedef struct s_game
 	void		*mlx;
 	void		*win;
 	t_img		screen;
-	t_player	player;
-	t_map		map;
-	char		**map;
-	int			map_width;
-	int			map_height;
-	t_img		textures[4];
+	t_player	*player; // this needs to be a pointer, no?
+	t_map		*map;
+	t_textures	*textures;
+// move this to the struct?
 	int			floor_color;
 	int			ceiling_color;
 }	t_game;
