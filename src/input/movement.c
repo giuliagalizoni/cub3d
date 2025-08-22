@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:38:59 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/21 18:39:00 by shutan           ###   ########.fr       */
+/*   Updated: 2025/08/22 06:02:29 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	move_left(t_game *game)
 	double	new_x;
 	double	new_y;
 
-	new_x = game->player.x - game->player.dy * 0.1;
-	new_y = game->player.y + game->player.dx * 0.1;
+	new_x = game->player.x + game->player.dy * 0.1;
+	new_y = game->player.y - game->player.dx * 0.1;
 	if (is_valid_position(game, new_x, new_y))
 	{
 		game->player.x = new_x;
@@ -33,8 +33,8 @@ void	move_right(t_game *game)
 	double	new_x;
 	double	new_y;
 
-	new_x = game->player.x + game->player.dy * 0.1;
-	new_y = game->player.y - game->player.dx * 0.1;
+	new_x = game->player.x - game->player.dy * 0.1;
+	new_y = game->player.y + game->player.dx * 0.1;
 	if (is_valid_position(game, new_x, new_y))
 	{
 		game->player.x = new_x;
