@@ -23,20 +23,20 @@ void	init(t_game *game)
 /* Initialize game with test map */
 void	init_test_game(t_game *game)
 {
-	static char	*test_map[] = {
-		"111111111",
-		"100000001",
-		"101010101",
-		"100000001",
-		"100N00001",
-		"100000001",
-		"101010101",
-		"100000001",
-		"111111111",
-		NULL
-	};
+	// static char	*test_map[] = {
+	// 	"111111111",
+	// 	"100000001",
+	// 	"101010101",
+	// 	"100000001",
+	// 	"100N00001",
+	// 	"100000001",
+	// 	"101010101",
+	// 	"100000001",
+	// 	"111111111",
+	// 	NULL
+	// };
 
-	game->map->arr = test_map;
+	// game->map->arr = test_map;
 	game->map->width = 9;
 	game->map->height = 9;
 	init_player(game, 3, 4, 'N');
