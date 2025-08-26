@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:22:55 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/21 18:40:16 by shutan           ###   ########.fr       */
+/*   Updated: 2025/08/26 16:22:59 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	init_screen_image(t_game *game)
 void	setup_hooks(t_game *game)
 {
 	mlx_hook(game->win, 2, 1L << 0, handle_keypress, game);
+	mlx_hook(game->win, 3, 1L << 1, handle_keyrelease, game);
 	mlx_hook(game->win, RED_CROSS, 0, close_window, game);
 	mlx_loop_hook(game->mlx, render_frame, game);
 }

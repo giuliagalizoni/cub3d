@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:38:23 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/21 18:40:16 by shutan           ###   ########.fr       */
+/*   Updated: 2025/08/26 16:48:07 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@
 # define WIN_HEIGHT 768
 # define FOV 60
 
+/* Movement settings */
+# define MOVE_SPEED 0.08
+# define ROTATION_SPEED 0.05
+
 /* Key codes for macOS */
 # define KEY_W 13
 # define KEY_A 0
@@ -41,6 +45,17 @@
 /* Math constants */
 # define PI 3.14159265359
 # define DR 0.0174533
+
+/* Key state structure */
+typedef struct s_keys
+{
+	int	w;
+	int	a;
+	int	s;
+	int	d;
+	int	left;
+	int	right;
+}	t_keys;
 
 /* Player structure */
 typedef struct s_player
@@ -71,6 +86,7 @@ typedef struct s_game
 	void		*win;
 	t_img		screen;
 	t_player	player;
+	t_keys		keys;
 	char		**map;
 	int			map_width;
 	int			map_height;
@@ -91,6 +107,8 @@ void	put_pixel(t_img *img, int x, int y, int color);
 
 /* Function prototypes - Input handling */
 int		handle_keypress(int keycode, t_game *game);
+int		handle_keyrelease(int keycode, t_game *game);
+void	update_movement(t_game *game);
 void	move_forward(t_game *game);
 void	move_backward(t_game *game);
 void	move_left(t_game *game);
@@ -115,5 +133,6 @@ int		is_wall(t_game *game, int x, int y);
 /* Function prototypes - Game initialization */
 void	init_player(t_game *game, double x, double y, char direction);
 void	set_default_colors(t_game *game);
+void	init_test_game(t_game *game);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:23:08 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/22 06:50:26 by shutan           ###   ########.fr       */
+/*   Updated: 2025/08/26 16:24:49 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /* Main rendering function called each frame */
 int	render_frame(t_game *game)
 {
+	update_movement(game);
 	clear_image(&game->screen, game->ceiling_color);
 	draw_floor_ceiling(game);
 	cast_rays(game);

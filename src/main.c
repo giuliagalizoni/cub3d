@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 06:49:10 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/22 06:49:11 by shutan           ###   ########.fr       */
+/*   Updated: 2025/08/26 16:48:07 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@ void	init_test_game(t_game *game)
 	game->map_height = 9;
 	init_player(game, 3, 4, 'N');
 	set_default_colors(game);
+	
+	// Initialize key states
+	game->keys.w = 0;
+	game->keys.a = 0;
+	game->keys.s = 0;
+	game->keys.d = 0;
+	game->keys.left = 0;
+	game->keys.right = 0;
 }
 
 /* Main function */
