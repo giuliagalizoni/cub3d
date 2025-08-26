@@ -65,6 +65,10 @@ int	main(int ac, char **av)
 	ft_printf("F: %d\n", game.textures->F);
 	ft_printf("C: %d\n", game.textures->C);
 
+	ft_printf("\n## MAP ARR##\n");
+	for (int i = 0; game.map->arr[i]; i++)
+		ft_printf("%s", game.map->arr[i]);
+
 	// init_test_game(&game);
 	// if (!init_window(&game))
 	// 	return (1);

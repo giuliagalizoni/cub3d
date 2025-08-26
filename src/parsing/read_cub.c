@@ -148,7 +148,7 @@ void	read_cub(char *path, t_game *game)
 		close(fd);
 		exit(1);
 	}
-	// parse_map(fd, line, game);
+	parse_map(fd, line, game);
 	free(line);
 	close(fd);
 }
