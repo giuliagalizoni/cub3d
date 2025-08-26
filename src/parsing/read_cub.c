@@ -37,7 +37,7 @@ static int	parse_rgb(char *rgb_str)
 
 static void	set_rgb(int *field, char *rgb_str, char *id)
 {
-	if (*field > 0)
+	if (*field != -1)
 		{
 			ft_printf("Error: Duplicate identifier for %s\n", id);
 			exit(1); //TODO: cleanup;
@@ -45,8 +45,19 @@ static void	set_rgb(int *field, char *rgb_str, char *id)
 	*field = parse_rgb(rgb_str);
 }
 
-static void	parse_line(char **tokens, t_game *game)
+static void	parse_line(char *line, t_game *game)
 {
+	char	*trimmed;
+	char **tokens;
+
+	trimmed = ft_strtrim(line, " \t\n\v\f\r");
+		if (!trimmed || !(*trimmed))
+			return;
+
+	tokens = ft_split(trimmed, ' '); // TODO: REDO THIS LOGIC
+		if (!tokens || !tokens[0] || !tokens[1])
+			return ; // handle error free trimmed
+
 	if (is_equal(tokens[0], "NO"))
 		set_texture(&game->textures->NO, tokens[1], "NO");
 	else if (is_equal(tokens[0], "SO"))
@@ -61,17 +72,21 @@ static void	parse_line(char **tokens, t_game *game)
 		set_rgb(&game->textures->C, tokens[1], "C");
 	else
 	{
-		// TODO map or invalid handling
-		ft_printf("Error parsing");
+		if (!game->textures->NO || !game->textures->SO || !game->textures->WE
+			|| !game->textures->EA || !game->textures->F || !game->textures->C)
+			return; // error missing config
+		parse_map(line, game);
 	}
+	// TODO: free tokens arr
+	free(trimmed);
 }
 
 void	read_cub(char *path, t_game *game)
 {
 	int		fd;
 	char	*line;
-	char	*trimmed;
-	char **tokens;
+	// char	*trimmed;
+	// char **tokens;
 
 	fd = open(path, O_RDONLY);
 	ft_printf("path: %s\n", path);
@@ -83,20 +98,18 @@ void	read_cub(char *path, t_game *game)
 	line = get_next_line(fd);
 	while (line)
 	{
-		trimmed = ft_strtrim(line, " \t\n\v\f\r");
+		// trimmed = ft_strtrim(line, " \t\n\v\f\r");
+		// free(line);
+		// if (!trimmed || !(*trimmed))
+		// 	break;
+
+		// tokens = ft_split(trimmed, ' '); // do I have to consider other spaces?
+		// if (!tokens || !tokens[0] || !tokens[1])
+		// 	return ; // handle error free trimmed
+
+		parse_line(line, game);
+
 		free(line);
-		if (!trimmed || !(*trimmed))
-			break;
-
-		tokens = ft_split(trimmed, ' '); // do I have to consider other spaces?
-		if (!tokens || !tokens[0] || !tokens[1])
-			return ; // handle error free trimmed
-
-		parse_line(tokens, game);
-
-		// TODO: free tokens arr
-
-		free(trimmed);
 		line = get_next_line(fd);
 	}
 	close(fd);
