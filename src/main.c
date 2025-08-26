@@ -21,27 +21,27 @@ void	init(t_game *game)
 }
 
 /* Initialize game with test map */
-void	init_test_game(t_game *game)
-{
-	static char	*test_map[] = {
-		"111111111",
-		"100000001",
-		"101010101",
-		"100000001",
-		"100N00001",
-		"100000001",
-		"101010101",
-		"100000001",
-		"111111111",
-		NULL
-	};
+// void	init_test_game(t_game *game)
+// {
+// 	static char	*test_map[] = {
+// 		"111111111",
+// 		"100000001",
+// 		"101010101",
+// 		"100000001",
+// 		"100N00001",
+// 		"100000001",
+// 		"101010101",
+// 		"100000001",
+// 		"111111111",
+// 		NULL
+// 	};
 
-	game->map->arr = test_map;
-	game->map->width = 9;
-	game->map->height = 9;
-	init_player(game, 3, 4, 'N');
-	set_default_colors(game);
-}
+// 	game->map->arr = test_map;
+// 	game->map->width = 9;
+// 	game->map->height = 9;
+// 	init_player(game, 3, 4, 'N');
+// 	set_default_colors(game);
+// }
 
 /* Main function */
 int	main(int ac, char **av)
@@ -65,12 +65,12 @@ int	main(int ac, char **av)
 	ft_printf("F: %d\n", game.textures->F);
 	ft_printf("C: %d\n", game.textures->C);
 
-	init_test_game(&game);
-	if (!init_window(&game))
-		return (1);
-	if (!init_screen_image(&game))
-		return (1);
-	setup_hooks(&game);
-	mlx_loop(game.mlx);
+	// init_test_game(&game);
+	// if (!init_window(&game))
+	// 	return (1);
+	// if (!init_screen_image(&game))
+	// 	return (1);
+	// setup_hooks(&game);
+	// mlx_loop(game.mlx);
 	return (0);
 }
