@@ -36,7 +36,8 @@ SRCS		= $(SRC_DIR)/main.c \
 		  $(INPUT_DIR)/input.c \
 		  $(INPUT_DIR)/movement.c \
 		  $(PARSER_DIR)/parser.c \
-		  $(PARSER_DIR)/read_cub.c
+		  $(PARSER_DIR)/read_cub.c \
+		  $(PARSER_DIR)/parse_map.c \
 
 # Object files
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
