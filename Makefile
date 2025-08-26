@@ -2,7 +2,6 @@ NAME		= cub3D
 
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -g
-INCLUDES	= -I./include -I./library/minilibx_opengl_20191021
 
 # Detect OS
 UNAME_S := $(shell uname -s)
@@ -54,7 +53,7 @@ $(NAME): $(OBJS) $(LIBFT_LIB)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDES) $(LIBFT_INC) -c $< -o $@
+	$(CC) $(CFLAGS) -I./include -I$(MLX_DIR) $(LIBFT_INC) -c $< -o $@
 
 setup_mlx:
 ifeq ($(UNAME_S),Darwin)

@@ -69,7 +69,17 @@ endif
 
 ### Common Linux Issues
 
-1. **Missing X11 libraries**
+1. **OpenGL headers not found**
+   ```
+   fatal error: OpenGL/gl3.h: No such file or directory
+   ```
+   **Solution**: This happens when macOS minilibx is used on Linux. The fixed Makefile now automatically uses the correct version.
+   ```bash
+   make clean
+   make
+   ```
+
+2. **Missing X11 libraries**
    ```
    /usr/bin/ld: cannot find -lX11
    ```
