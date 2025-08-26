@@ -2,7 +2,22 @@ NAME		= cub3D
 
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -g
-INCLUDES	= -I./include -I./library/minilibx_opengl_20191021
+
+# Detect OS
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	# Linux configuration
+	MLX_DIR		= library/minilibx-linux
+	MLX_LIB		= $(MLX_DIR)/libmlx.a
+	MLX_FLAGS	= -lXext -lX11 -lm
+	INCLUDES	= -I./include -I./$(MLX_DIR)
+else
+	# macOS configuration
+	MLX_DIR		= library/minilibx_opengl_20191021
+	MLX_LIB		= $(MLX_DIR)/libmlx.a
+	MLX_FLAGS	= -framework OpenGL -framework AppKit
+	INCLUDES	= -I./include -I./$(MLX_DIR)
+endif
 
 # Directories
 SRC_DIR		= src
@@ -25,16 +40,10 @@ SRCS		= $(SRC_DIR)/main.c \
 # Object files
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-# MinilibX
-MLX_DIR		= library/minilibx_opengl_20191021
-MLX_LIB		= $(MLX_DIR)/libmlx.a
-MLX_FLAGS	= -framework OpenGL -framework AppKit
-
 # Libft
 LIBFT_DIR	= libft
 LIBFT_LIB	= $(LIBFT_DIR)/libft.a
 LIBFT_INC	= -I$(LIBFT_DIR)
-
 
 # Rules
 all: $(MLX_LIB) $(LIBFT_LIB) $(NAME)
