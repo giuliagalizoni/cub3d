@@ -37,6 +37,12 @@ RUN chown -R developer:developer /workspace
 # Switch to developer user
 USER developer
 
+# Recompile libft for Linux (remove macOS compiled version)
+RUN cd /workspace && \
+    rm -f libft/libft.a && \
+    make -C libft clean && \
+    make -C libft
+
 # Set up environment for X11 forwarding (for GUI applications)
 ENV DISPLAY=host.docker.internal:0
 

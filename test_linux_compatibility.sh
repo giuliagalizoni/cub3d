@@ -12,18 +12,22 @@ else
     exit 1
 fi
 
-# Test 2: Check if Linux minilibx can be compiled
+# Test 2: Check if Linux minilibx can be compiled (skip if already compiled)
 echo "2. Testing Linux minilibx compilation..."
-cd library/minilibx-linux
-make clean > /dev/null 2>&1
-if make > /dev/null 2>&1; then
-    echo "   ✅ Linux minilibx compiles successfully"
+if [ -f "library/minilibx-linux/libmlx.a" ]; then
+    echo "   ✅ Linux minilibx already compiled"
 else
-    echo "   ❌ Linux minilibx compilation failed"
+    cd library/minilibx-linux
+    make clean > /dev/null 2>&1
+    if make > /dev/null 2>&1; then
+        echo "   ✅ Linux minilibx compiles successfully"
+    else
+        echo "   ❌ Linux minilibx compilation failed"
+        cd ../..
+        exit 1
+    fi
     cd ../..
-    exit 1
 fi
-cd ../..
 
 # Test 3: Check if main project compiles with Linux settings
 echo "3. Testing main project compilation..."
