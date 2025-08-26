@@ -2,5 +2,6 @@
 
 void	parse_map(char *line, t_game *game)
 {
-
+	(void)line;
+	(void)game;
 }

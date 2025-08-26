@@ -45,72 +45,110 @@ static void	set_rgb(int *field, char *rgb_str, char *id)
 	*field = parse_rgb(rgb_str);
 }
 
-static void	parse_line(char *line, t_game *game)
+char	*get_first_word(char *line)
 {
-	char	*trimmed;
-	char **tokens;
+	int i;
+	int start;
+	int end;
 
-	trimmed = ft_strtrim(line, " \t\n\v\f\r");
-		if (!trimmed || !(*trimmed))
-			return;
-
-	tokens = ft_split(trimmed, ' '); // TODO: REDO THIS LOGIC
-		if (!tokens || !tokens[0] || !tokens[1])
-			return ; // handle error free trimmed
-
-	if (is_equal(tokens[0], "NO"))
-		set_texture(&game->textures->NO, tokens[1], "NO");
-	else if (is_equal(tokens[0], "SO"))
-		set_texture(&game->textures->SO, tokens[1], "SO");
-	else if (is_equal(tokens[0], "WE"))
-		set_texture(&game->textures->WE, tokens[1], "WE");
-	else if (is_equal(tokens[0], "EA"))
-		set_texture(&game->textures->EA, tokens[1], "EA");
-	else if (is_equal(tokens[0], "F"))
-		set_rgb(&game->textures->F, tokens[1], "F");
-	else if (is_equal(tokens[0], "C"))
-		set_rgb(&game->textures->C, tokens[1], "C");
-	else
-	{
-		if (!game->textures->NO || !game->textures->SO || !game->textures->WE
-			|| !game->textures->EA || !game->textures->F || !game->textures->C)
-			return; // error missing config
-		parse_map(line, game);
-	}
-	// TODO: free tokens arr
-	free(trimmed);
+	i = 0;
+	while (line[i] == ' ' || line[i] == '\t') // do I need this, since I have trimmed the line first? maybe it's better to do it only here;
+		i++;
+	start = i;
+	while (line[i] && line[i] != ' ' && line[i] != '\t')
+		i++;
+	end = i;
+	return (ft_substr(line, start, end - start));
 }
 
+static int	parse_config_line(char *line, t_game *game)
+{
+	char	*trimmed;
+	char	*id;
+	char	*value;
+
+	trimmed = ft_strtrim(line, " \t\n\v\f\r");
+	if (!trimmed)
+		return (0);
+	if (!*trimmed)
+	{
+		free(trimmed);
+		return (0);
+	}
+	id = get_first_word(trimmed);
+	value = trimmed + ft_strlen(id);
+	while (*value == ' ' || *value == '\t')
+		value++;
+	if (is_equal(id, "NO"))
+		set_texture(&game->textures->NO, value, "NO");
+	else if (is_equal(id, "SO"))
+		set_texture(&game->textures->SO, value, "SO");
+	else if (is_equal(id, "WE"))
+		set_texture(&game->textures->WE, value, "WE");
+	else if (is_equal(id, "EA"))
+		set_texture(&game->textures->EA, value, "EA");
+	else if (is_equal(id, "F"))
+		set_rgb(&game->textures->F, value, "F");
+	else if (is_equal(id, "C"))
+		set_rgb(&game->textures->C, value, "C");
+	else
+	{
+		free(id);
+		free(trimmed);
+		return (-1);
+	}
+	free(id);
+	free(trimmed);
+	return (1);
+}
+
+static int	is_config_all_set(t_game *game)
+{
+	if (game->textures->NO && game->textures->SO
+		&& game->textures->WE && game->textures->EA
+		&& game->textures->F != -1 && game->textures->C != -1)
+		return (1);
+	return (0);
+}
+// TODO: organize all error messages (ENUM? MACROS?)
+// TODO: decide how to print errors (custom perror?)
 void	read_cub(char *path, t_game *game)
 {
 	int		fd;
 	char	*line;
-	// char	*trimmed;
-	// char **tokens;
+	int		parse_result;
 
 	fd = open(path, O_RDONLY);
 	ft_printf("path: %s\n", path);
 	if (fd < 0)
 	{
 		perror("Error opening file");
-		return ; // handle error
+		return ;
 	}
 	line = get_next_line(fd);
 	while (line)
 	{
-		// trimmed = ft_strtrim(line, " \t\n\v\f\r");
-		// free(line);
-		// if (!trimmed || !(*trimmed))
-		// 	break;
-
-		// tokens = ft_split(trimmed, ' '); // do I have to consider other spaces?
-		// if (!tokens || !tokens[0] || !tokens[1])
-		// 	return ; // handle error free trimmed
-
-		parse_line(line, game);
-
+		parse_result = parse_config_line(line, game);
+		if (parse_result == -1)
+			break;
 		free(line);
 		line = get_next_line(fd);
 	}
+	if (!is_config_all_set(game))
+	{
+		ft_printf("Error: Invalid identifier or incomplete configuration.\n");
+		if (line)
+			free(line);
+		close(fd);
+		exit(1);
+	}
+	if (!line)
+	{
+		ft_printf("Error: Map not found in file.\n");
+		close(fd);
+		exit(1);
+	}
+	// parse_map(fd, line, game);
+	free(line);
 	close(fd);
 }
