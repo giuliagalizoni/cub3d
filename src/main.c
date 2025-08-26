@@ -18,25 +18,30 @@ void	init(t_game *game)
 	if (!game->map)
 		return ; // error handling
 	game->map->arr = NULL;
+	// testing values
+	game->map->width = 6;
+	game->map->height = 4;
+	init_player(game, 4, 2, 'N');
+	set_default_colors(game);
 }
 
 /* Initialize game with test map */
 void	init_test_game(t_game *game)
 {
-	// static char	*test_map[] = {
-	// 	"111111111",
-	// 	"100000001",
-	// 	"101010101",
-	// 	"100000001",
-	// 	"100N00001",
-	// 	"100000001",
-	// 	"101010101",
-	// 	"100000001",
-	// 	"111111111",
-	// 	NULL
-	// };
+	static char	*test_map[] = {
+		"111111111",
+		"100000001",
+		"101010101",
+		"100000001",
+		"100N00001",
+		"100000001",
+		"101010101",
+		"100000001",
+		"111111111",
+		NULL
+	};
 
-	// game->map->arr = test_map;
+	game->map->arr = test_map;
 	game->map->width = 9;
 	game->map->height = 9;
 	init_player(game, 3, 4, 'N');
@@ -69,7 +74,7 @@ int	main(int ac, char **av)
 	for (int i = 0; game.map->arr[i]; i++)
 		ft_printf("%s", game.map->arr[i]);
 
-	init_test_game(&game);
+	// init_test_game(&game);
 	if (!init_window(&game))
 		return (1);
 	if (!init_screen_image(&game))
