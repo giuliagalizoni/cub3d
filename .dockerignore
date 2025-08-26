@@ -1,0 +1,32 @@
+# Git files
+.git
+.gitignore
+
+# Build artifacts
+cub3D
+*.o
+*.a
+obj/
+
+# macOS specific files
+.DS_Store
+*.dSYM
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*~
+*.tmp
+
+# Documentation (optional, can be included if needed)
+# README_LINUX_COMPATIBILITY.md
+# test_linux_compatibility.sh
+
+# Docker files
+Dockerfile
+.dockerignore
+docker_setup.sh
