@@ -4,6 +4,9 @@ CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -g
 INCLUDES	= -I./include -I./library/minilibx_opengl_20191021
 
+# Detect OS
+UNAME_S := $(shell uname -s)
+
 # Directories
 SRC_DIR		= src
 OBJ_DIR		= obj
@@ -25,36 +28,59 @@ SRCS		= $(SRC_DIR)/main.c \
 # Object files
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-# MinilibX
-MLX_DIR		= library/minilibx_opengl_20191021
-MLX_LIB		= $(MLX_DIR)/libmlx.a
-MLX_FLAGS	= -framework OpenGL -framework AppKit
+# OS-specific settings
+ifeq ($(UNAME_S),Darwin)
+    # macOS
+    MLX_DIR		= library/minilibx_opengl_20191021
+    MLX_LIB		= $(MLX_DIR)/libmlx.a
+    MLX_FLAGS	= -framework OpenGL -framework AppKit
+else
+    # Linux
+    MLX_DIR		= library/minilibx-linux
+    MLX_LIB		= $(MLX_DIR)/libmlx.a
+    MLX_FLAGS	= -lmlx -lXext -lX11
+endif
 
 # Libft
 LIBFT_DIR	= libft
 LIBFT_LIB	= $(LIBFT_DIR)/libft.a
 LIBFT_INC	= -I$(LIBFT_DIR)
 
-
 # Rules
-all: $(MLX_LIB) $(LIBFT_LIB) $(NAME)
+all: setup_mlx $(LIBFT_LIB) $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT_LIB)
-	$(CC) $(OBJS) -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft $(MLX_FLAGS) -lm -o $(NAME)
+	$(CC) $(OBJS) -L$(MLX_DIR) -lmlx $(MLX_FLAGS) -L$(LIBFT_DIR) -lft -lm -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) $(LIBFT_INC) -c $< -o $@
 
-$(MLX_LIB):
-	@make -C $(MLX_DIR)
+setup_mlx:
+ifeq ($(UNAME_S),Darwin)
+	@if [ ! -d "$(MLX_DIR)" ]; then \
+		echo "Setting up macOS minilibx..."; \
+		cd library && tar -xzf minilibx_macos_opengl.tgz; \
+	fi
+	@make -C $(MLX_DIR) 2>/dev/null || echo "minilibx already compiled"
+else
+	@if [ ! -d "$(MLX_DIR)" ]; then \
+		echo "Setting up Linux minilibx..."; \
+		cd library && tar -xzf minilibx-linux.tgz; \
+	fi
+	@make -C $(MLX_DIR) 2>/dev/null || echo "minilibx already compiled"
+endif
 
 $(LIBFT_LIB):
 	@make -C $(LIBFT_DIR)
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@make -C $(MLX_DIR) clean
+ifeq ($(UNAME_S),Darwin)
+	@make -C $(MLX_DIR) clean 2>/dev/null || true
+else
+	@make -C $(MLX_DIR) clean 2>/dev/null || true
+endif
 	@make -C $(LIBFT_DIR) clean
 
 fclean: clean
@@ -63,4 +89,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re setup_mlx
