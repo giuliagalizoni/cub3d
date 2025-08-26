@@ -12,6 +12,8 @@ void	init(t_game *game)
 	game->textures->SO = NULL;
 	game->textures->WE = NULL;
 	game->textures->EA = NULL;
+	game->textures->C = -1;
+	game->textures->F = -1;
 	game->map = malloc(sizeof(t_map));
 	if (!game->map)
 		return ; // error handling
@@ -60,6 +62,12 @@ int	main(int ac, char **av)
 	ft_printf("SO: %s\n", game.textures->SO);
 	ft_printf("WE: %s\n", game.textures->WE);
 	ft_printf("EA: %s\n", game.textures->EA);
+	ft_printf("F: %d\n", game.textures->F);
+	ft_printf("C: %d\n", game.textures->C);
+
+	ft_printf("\n## MAP ARR##\n");
+	for (int i = 0; game.map->arr[i]; i++)
+		ft_printf("%s", game.map->arr[i]);
 
 	init_test_game(&game);
 	if (!init_window(&game))
