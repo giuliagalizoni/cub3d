@@ -30,6 +30,7 @@ void	parser(char *path, t_game *game)
 		return ; // figure out exit and error printing
 	}
 	read_cub(path, game);
-
+	scan_map(game->map);
+	// validade_map(game->map);
 }
 
