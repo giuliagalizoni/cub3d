@@ -19,6 +19,18 @@ static void	set_texture(char **field, char *path, char *id)
 	*field = ft_strdup(path);
 }
 
+static int	arr_size(char **arr)
+{
+    int	i;
+
+    i = 0;
+    if (!arr)
+        return (0);
+    while (arr[i])
+        i++;
+    return (i);
+}
+
 static int	parse_rgb(char *rgb_str)
 {
 	int	r;
@@ -27,11 +39,18 @@ static int	parse_rgb(char *rgb_str)
 	char **rgb_arr;
 
 	rgb_arr = ft_split(rgb_str, ',');
+	if (!rgb_arr || arr_size(rgb_arr) != 3)
+	{
+		// if arr free arr
+		ft_printf("Error: incorect color format\n");
+		exit(EXIT_FAILURE);
+	}
 	if (!rgb_arr)
 		return (-1); // handle error and exit
 	r = atoi(rgb_arr[0]);
 	g = atoi(rgb_arr[1]);
 	b = atoi(rgb_arr[2]);
+	// free_arr(rgb_arr);
 	return ((r << 16) | (g << 8) | b);
 }
 
