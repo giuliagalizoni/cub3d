@@ -84,9 +84,11 @@ typedef struct s_textures {
 
 typedef struct s_map {
 		char **arr;
-		int    width;
-		int    height;
-		//...
+		int	width;
+		int	height;
+		int	player_x;
+		int	player_y;
+		char	player_dir;
 } t_map;
 
 /* Game data structure */
@@ -107,6 +109,10 @@ typedef struct s_game
 void	parser(char *path, t_game *game);
 void	read_cub(char *path, t_game *game);
 void	parse_map(int fd, char *first_line, t_game *game);
+int	scan_map(t_map *map);
+void	validade_map(t_map *map);
+
+int	is_equal(char *str1, char *str2);
 
 /* Function prototypes - Window management */
 int		init_window(t_game *game);
