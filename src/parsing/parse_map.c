@@ -1,11 +1,61 @@
 #include "../../include/cub3d.h"
 
+void	get_dimensions(t_map *map)
+{
+	char **arr = map->arr;
+	int	y;
+	int	x;
+	int	width;
+
+	y = 0;
+	width = 0;
+	while (arr[y])
+	{
+		x = ft_strlen(arr[y]);
+		if (x > width)
+			width = x;
+		y++;
+	}
+	map->height = y;
+	map->width = width;
+}
+
+static void	pad_map(t_game *game)
+{
+	int		i;
+	int		len;
+	char	*new_row;
+
+	// find max width
+	i = 0;
+	while (game->map->arr[i])
+	{
+		len = ft_strlen(game->map->arr[i]);
+		if (len < game->map->width)
+		{
+			new_row = malloc(game->map->width + 1);
+			if (!new_row)
+				exit(EXIT_FAILURE); // TODO: cleanup
+			ft_memcpy(new_row, game->map->arr[i], len);
+			ft_memset(new_row + len, ' ', game->map->width - len);
+			new_row[game->map->width] = '\0';
+			free(game->map->arr[i]);
+			game->map->arr[i] = new_row;
+		}
+		i++;
+	}
+}
 static char	**push_to_arr(char **arr, int size, char *line)
 {
 	char	**new_arr;
 	int		i;
-	char	*trimmed;
 
+	if (is_equal(line, "\n"))
+	{
+		ft_printf("Error: empty line");
+		// TODO: cleanup free arr function
+		return (NULL);
+	}
 	new_arr = malloc(sizeof(char *) * (size + 2));
 	if (!new_arr)
 		return (NULL);
@@ -15,13 +65,13 @@ static char	**push_to_arr(char **arr, int size, char *line)
 		new_arr[i] = arr[i];
 		i++;
 	}
-	trimmed = ft_strtrun(line, "\n");
-	if (!trimmed)
+	new_arr[size] = ft_strtrim(line, "\n");
+	if (!new_arr[size])
 	{
-		// free(new_arr); TODO
-		return (NULL);
+		// handle error
+		perror("malloc error strtrim");
+		return NULL;
 	}
-	new_arr[size] = trimmed;
 	new_arr[size + 1] = NULL;
 	if (arr)
 		free(arr);
@@ -60,5 +110,6 @@ void	parse_map(int fd, char *first_line, t_game *game)
 		free(line);
 		line = get_next_line(fd);
 	}
-
+	get_dimensions(game->map);
+	pad_map(game);
 }
