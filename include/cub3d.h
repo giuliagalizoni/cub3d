@@ -110,7 +110,7 @@ void	parser(char *path, t_game *game);
 void	read_cub(char *path, t_game *game);
 void	parse_map(int fd, char *first_line, t_game *game);
 int	scan_map(t_map *map);
-void	validade_map(t_map *map);
+void	validade_map(t_game *game);
 
 int	is_equal(char *str1, char *str2);
 
@@ -150,5 +150,9 @@ int		is_wall(t_game *game, int x, int y);
 /* Function prototypes - Game initialization */
 void	init_player(t_game *game, double x, double y, char direction);
 void	set_default_colors(t_game *game);
+
+/* Function prototypes - Cleaning */
+void	free_arr(char **arr);
+void	cleanup_parsing(t_game *game);
 
 #endif

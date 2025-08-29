@@ -40,6 +40,7 @@ SRCS		= $(SRC_DIR)/main.c \
 		  $(PARSER_DIR)/parse_map.c \
 		  $(PARSER_DIR)/validate_map.c \
 		  $(PARSER_DIR)/scan_map.c \
+		  $(PARSER_DIR)/cleanup.c \
 
 # Object files
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
