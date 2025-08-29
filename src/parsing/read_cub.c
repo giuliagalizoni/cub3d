@@ -172,9 +172,7 @@ void	read_cub(char *path, t_game *game)
 		// The "still reachable" memory is in get_next_line's internal static buffer.
         // To free it, you must exhaust the file descriptor by calling GNL until it returns NULL.
 
-        char *temp;
-        while ((temp = get_next_line(fd)))
-            free(temp);
+        exhaust_gnl(fd);
 		cleanup_parsing(game);
 		close(fd);
 		exit(EXIT_FAILURE);

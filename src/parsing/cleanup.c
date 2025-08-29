@@ -18,6 +18,20 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
+void	exhaust_gnl(int fd)
+{
+	char	*temp;
+
+	if (fd < 0)
+		return;
+	temp = get_next_line(fd);
+	while (temp)
+	{
+		free(temp);
+		temp = get_next_line(fd);
+	}
+}
+
 void	cleanup_parsing(t_game *game)
 {
 	if (!game)

@@ -101,8 +101,11 @@ void	parse_map(int fd, char *first_line, t_game *game)
 		if (line[0] == '\n') // Skip empty lines after the map starts
 		{
 			ft_printf("Error: Empty line inside map definition.\n");
+			free(first_line);
 			free(line);
-			// cleanup
+        	exhaust_gnl(fd);
+			cleanup_parsing(game);
+			close(fd);
 			exit(EXIT_FAILURE);
 		}
 		game->map->arr = push_to_arr(game->map->arr, size++, line);
