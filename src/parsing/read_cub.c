@@ -22,14 +22,14 @@ static void	set_texture(t_game *game, char **field, char *path, char *id)
 
 static int	arr_size(char **arr)
 {
-    int	i;
+	int	i;
 
-    i = 0;
-    if (!arr)
-        return (0);
-    while (arr[i])
-        i++;
-    return (i);
+	i = 0;
+	if (!arr)
+		return (0);
+	while (arr[i])
+		i++;
+	return (i);
 }
 
 static int	parse_rgb(char *rgb_str)
@@ -44,16 +44,21 @@ static int	parse_rgb(char *rgb_str)
 	{
 		// if arr free arr
 		if (rgb_arr)
-			free(rgb_arr);
+			free_arr(rgb_arr);
 		ft_printf("Error: incorect color format\n");
 		exit(EXIT_FAILURE);
 	}
 	if (!rgb_arr)
 		return (-1); // handle error and exit
-	r = atoi(rgb_arr[0]);
-	g = atoi(rgb_arr[1]);
-	b = atoi(rgb_arr[2]);
+	r = ft_atoi(rgb_arr[0]);
+	g = ft_atoi(rgb_arr[1]);
+	b = ft_atoi(rgb_arr[2]);
 	free_arr(rgb_arr);
+	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+	{
+		ft_printf("Error: RGB values must be between 0 and 255.\n");
+		exit(EXIT_FAILURE);
+	}
 	return ((r << 16) | (g << 8) | b);
 }
 
@@ -147,7 +152,8 @@ void	read_cub(char *path, t_game *game)
 	if (fd < 0)
 	{
 		perror("Error opening file");
-		return ;
+		cleanup_game(game);
+		exit(EXIT_FAILURE);
 	}
 	line = get_next_line(fd);
 	while (line)
@@ -163,14 +169,22 @@ void	read_cub(char *path, t_game *game)
 		ft_printf("Error: Invalid identifier or incomplete configuration.\n");
 		if (line)
 			free(line);
+		// The "still reachable" memory is in get_next_line's internal static buffer.
+        // To free it, you must exhaust the file descriptor by calling GNL until it returns NULL.
+
+        char *temp;
+        while ((temp = get_next_line(fd)))
+            free(temp);
+		cleanup_parsing(game);
 		close(fd);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	if (!line)
 	{
 		ft_printf("Error: Map not found in file.\n");
+		cleanup_game(game);
 		close(fd);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	parse_map(fd, line, game);
 	free(line);
