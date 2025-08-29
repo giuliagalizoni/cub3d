@@ -6,6 +6,21 @@ CFLAGS		= -Wall -Wextra -Werror -g
 # Detect OS
 UNAME_S := $(shell uname -s)
 
+# OS-specific settings
+ifeq ($(UNAME_S),Darwin)
+    # macOS
+    MLX_DIR		= library/minilibx_opengl_20191021
+    MLX_LIB		= $(MLX_DIR)/libmlx.a
+    MLX_FLAGS	= -framework OpenGL -framework AppKit
+    INCLUDES	= -I./include -I./$(MLX_DIR)
+else
+    # Linux
+    MLX_DIR		= library/minilibx-linux
+    MLX_LIB		= $(MLX_DIR)/libmlx.a
+    MLX_FLAGS	= -lXext -lX11 -lm
+    INCLUDES	= -I./include -I./$(MLX_DIR)
+endif
+
 # Directories
 SRC_DIR		= src
 OBJ_DIR		= obj
@@ -22,24 +37,14 @@ SRCS		= $(SRC_DIR)/main.c \
 		  $(RENDER_DIR)/wall_drawing.c \
 		  $(INPUT_DIR)/input.c \
 		  $(INPUT_DIR)/movement.c \
-		  $(PARSER_DIR)/parser.c
+		  $(PARSER_DIR)/parser.c \
+		  $(PARSER_DIR)/read_cub.c \
+		  $(PARSER_DIR)/parse_map.c \
+		  $(PARSER_DIR)/validate_map.c \
+		  $(PARSER_DIR)/scan_map.c \
 
 # Object files
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-
-# OS-specific settings
-ifeq ($(UNAME_S),Darwin)
-    # macOS
-    MLX_DIR		= library/minilibx_opengl_20191021
-    MLX_LIB		= $(MLX_DIR)/libmlx.a
-    MLX_FLAGS	= -framework OpenGL -framework AppKit
-else
-    # Linux
-    MLX_DIR		= library/minilibx-linux
-    MLX_LIB		= $(MLX_DIR)/libmlx.a
-    MLX_FLAGS	= -lmlx -lXext -lX11
-endif
-
 # Libft
 LIBFT_DIR	= libft
 LIBFT_LIB	= $(LIBFT_DIR)/libft.a

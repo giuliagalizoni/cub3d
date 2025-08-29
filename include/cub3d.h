@@ -8,14 +8,31 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include "../libft/libft.h"
+
+/* Detect OS and include appropriate mlx.h */
+#ifdef __linux__
+# include "../library/minilibx-linux/mlx.h"
+#else
 # include "../library/minilibx_opengl_20191021/mlx.h"
+#endif
 
 /* Window settings */
 # define WIN_WIDTH 1024
 # define WIN_HEIGHT 768
 # define FOV 60
 
-/* Key codes for macOS */
+/* Key codes - Linux vs macOS */
+#ifdef __linux__
+/* Linux key codes */
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
+# define KEY_ESC 65307
+#else
+/* macOS key codes */
 # define KEY_W 13
 # define KEY_A 0
 # define KEY_S 1
@@ -23,6 +40,7 @@
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
 # define KEY_ESC 53
+#endif
 
 /* Colors */
 # define RED_CROSS 17
@@ -66,9 +84,11 @@ typedef struct s_textures {
 
 typedef struct s_map {
 		char **arr;
-		int    width;
-		int    height;
-		//...
+		int	width;
+		int	height;
+		int	player_x;
+		int	player_y;
+		char	player_dir;
 } t_map;
 
 /* Game data structure */
@@ -87,6 +107,12 @@ typedef struct s_game
 
 /*Function prototypes - Parsing*/
 void	parser(char *path, t_game *game);
+void	read_cub(char *path, t_game *game);
+void	parse_map(int fd, char *first_line, t_game *game);
+int	scan_map(t_map *map);
+void	validade_map(t_map *map);
+
+int	is_equal(char *str1, char *str2);
 
 /* Function prototypes - Window management */
 int		init_window(t_game *game);

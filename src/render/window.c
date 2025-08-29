@@ -40,8 +40,15 @@ int	init_screen_image(t_game *game)
 /* Set up event hooks */
 void	setup_hooks(t_game *game)
 {
+#ifdef __linux__
+	/* Linux: Use mlx_key_hook for key events */
+	mlx_key_hook(game->win, handle_keypress, game);
+	mlx_hook(game->win, 17, 0, close_window, game); /* ClientMessage for close */
+#else
+	/* macOS: Use mlx_hook for key events */
 	mlx_hook(game->win, 2, 1L << 0, handle_keypress, game);
 	mlx_hook(game->win, RED_CROSS, 0, close_window, game);
+#endif
 	mlx_loop_hook(game->mlx, render_frame, game);
 }
 
