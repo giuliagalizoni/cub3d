@@ -9,12 +9,13 @@ int	is_equal(char *str1, char *str2)
 	return (0);
 }
 
-static void	set_texture(char **field, char *path, char *id)
+static void	set_texture(t_game *game, char **field, char *path, char *id)
 {
 	if (*field)
 	{
 		ft_printf("Error: Duplicate texture identifier for %s\n", id);
-		exit(1); //TODO: cleanup;
+		cleanup_game(game);
+		exit(EXIT_FAILURE);
 	}
 	*field = ft_strdup(path);
 }
@@ -42,6 +43,8 @@ static int	parse_rgb(char *rgb_str)
 	if (!rgb_arr || arr_size(rgb_arr) != 3)
 	{
 		// if arr free arr
+		if (rgb_arr)
+			free(rgb_arr);
 		ft_printf("Error: incorect color format\n");
 		exit(EXIT_FAILURE);
 	}
@@ -50,18 +53,20 @@ static int	parse_rgb(char *rgb_str)
 	r = atoi(rgb_arr[0]);
 	g = atoi(rgb_arr[1]);
 	b = atoi(rgb_arr[2]);
-	// free_arr(rgb_arr);
+	free_arr(rgb_arr);
 	return ((r << 16) | (g << 8) | b);
 }
 
-static void	set_rgb(int *field, char *rgb_str, char *id)
+static void	set_rgb(t_game *game, int *field, char *rgb_str, char *id)
 {
 	if (*field != -1)
 		{
 			ft_printf("Error: Duplicate identifier for %s\n", id);
-			exit(1); //TODO: cleanup;
+			cleanup_game(game);
+			exit(EXIT_FAILURE); //TODO: cleanup;
 		}
 	*field = parse_rgb(rgb_str);
+
 }
 
 char	*get_first_word(char *line)
@@ -99,17 +104,17 @@ static int	parse_config_line(char *line, t_game *game)
 	while (*value == ' ' || *value == '\t')
 		value++;
 	if (is_equal(id, "NO"))
-		set_texture(&game->textures->NO, value, "NO");
+		set_texture(game, &game->textures->NO, value, "NO");
 	else if (is_equal(id, "SO"))
-		set_texture(&game->textures->SO, value, "SO");
+		set_texture(game, &game->textures->SO, value, "SO");
 	else if (is_equal(id, "WE"))
-		set_texture(&game->textures->WE, value, "WE");
+		set_texture(game, &game->textures->WE, value, "WE");
 	else if (is_equal(id, "EA"))
-		set_texture(&game->textures->EA, value, "EA");
+		set_texture(game, &game->textures->EA, value, "EA");
 	else if (is_equal(id, "F"))
-		set_rgb(&game->textures->F, value, "F");
+		set_rgb(game, &game->textures->F, value, "F");
 	else if (is_equal(id, "C"))
-		set_rgb(&game->textures->C, value, "C");
+		set_rgb(game, &game->textures->C, value, "C");
 	else
 	{
 		free(id);

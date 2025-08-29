@@ -1,13 +1,13 @@
 #include "../include/cub3d.h"
 
-void	init(t_game *game)
+int	init(t_game *game)
 {
 	game->player = malloc(sizeof(t_player));
 	if (!game->player)
-		return ; // error handling
+		return (0); // error handling
 	game->textures = malloc(sizeof(t_textures));
 	if (!game->textures)
-		return ; // error handling
+		return (0); // error handling
 	game->textures->NO = NULL;
 	game->textures->SO = NULL;
 	game->textures->WE = NULL;
@@ -16,11 +16,12 @@ void	init(t_game *game)
 	game->textures->F = -1;
 	game->map = malloc(sizeof(t_map));
 	if (!game->map)
-		return ; // error handling
+		return (0); // error handling
 	game->map->arr = NULL;
 	game->map->player_x = -1;
 	game->map->player_x = -1;
 	game->map->player_dir = '\0';
+	return (1);
 }
 
 /* Initialize game with test map */
@@ -57,7 +58,11 @@ int	main(int ac, char **av)
 		return (1);
 	}
 
-	init(&game);
+	if (!init(&game))
+	{
+		cleanup_parsing(&game);
+		return (1);
+	}
 	parser(av[1], &game);
 
 	// DEBUG
@@ -78,18 +83,24 @@ int	main(int ac, char **av)
 	ft_printf("player position y: %d\n", game.map->player_y);
 	ft_printf("player direction: %c\n", game.map->player_dir);
 
-	// init_test_game(&game);
 	init_player(&game, game.map->player_x, game.map->player_y, game.map->player_dir);
 	if (!init_window(&game))
+	{
+		cleanup_parsing(&game);
 		return (1);
+	}
 
 	// conversion of rgb to mlx format -- decide where this fits better
 	game.textures->F = mlx_get_color_value(game.mlx, game.textures->F);
-    game.textures->C = mlx_get_color_value(game.mlx, game.textures->C);
+	game.textures->C = mlx_get_color_value(game.mlx, game.textures->C);
 
 	if (!init_screen_image(&game))
+	{
+		cleanup_parsing(&game);
 		return (1);
+	}
 	setup_hooks(&game);
 	mlx_loop(game.mlx);
+	cleanup_parsing(&game);
 	return (0);
 }

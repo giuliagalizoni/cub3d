@@ -26,7 +26,6 @@ static void	pad_map(t_game *game)
 	int		len;
 	char	*new_row;
 
-	// find max width
 	i = 0;
 	while (game->map->arr[i])
 	{
@@ -35,7 +34,10 @@ static void	pad_map(t_game *game)
 		{
 			new_row = malloc(game->map->width + 1);
 			if (!new_row)
+			{
+
 				exit(EXIT_FAILURE); // TODO: cleanup
+			}
 			ft_memcpy(new_row, game->map->arr[i], len);
 			ft_memset(new_row + len, ' ', game->map->width - len);
 			new_row[game->map->width] = '\0';
@@ -53,6 +55,7 @@ static char	**push_to_arr(char **arr, int size, char *line)
 	if (is_equal(line, "\n"))
 	{
 		ft_printf("Error: empty line");
+		free_arr(arr); // this is needed?
 		// TODO: cleanup free arr function
 		return (NULL);
 	}
@@ -69,6 +72,7 @@ static char	**push_to_arr(char **arr, int size, char *line)
 	if (!new_arr[size])
 	{
 		// handle error
+		free_arr(new_arr);
 		perror("malloc error strtrim");
 		return NULL;
 	}
