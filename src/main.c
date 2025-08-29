@@ -21,6 +21,14 @@ void	init(t_game *game)
 	game->map->player_x = -1;
 	game->map->player_x = -1;
 	game->map->player_dir = '\0';
+	
+	// Initialize key states
+	game->keys.w = 0;
+	game->keys.a = 0;
+	game->keys.s = 0;
+	game->keys.d = 0;
+	game->keys.left = 0;
+	game->keys.right = 0;
 }
 
 /* Initialize game with test map */

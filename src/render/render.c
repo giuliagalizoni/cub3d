@@ -15,6 +15,7 @@
 /* Main rendering function called each frame */
 int	render_frame(t_game *game)
 {
+	update_movement(game);
 	clear_image(&game->screen, game->ceiling_color);
 	draw_floor_ceiling(game);
 	cast_rays(game);

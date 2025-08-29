@@ -18,8 +18,8 @@ void	move_left(t_game *game)
 	double	new_x;
 	double	new_y;
 
-	new_x = game->player->x + game->player->dy * 0.1;
-	new_y = game->player->y - game->player->dx * 0.1;
+	new_x = game->player->x + game->player->dy * MOVE_SPEED;
+	new_y = game->player->y - game->player->dx * MOVE_SPEED;
 	if (is_valid_position(game, new_x, new_y))
 	{
 		game->player->x = new_x;
@@ -33,8 +33,8 @@ void	move_right(t_game *game)
 	double	new_x;
 	double	new_y;
 
-	new_x = game->player->x - game->player->dy * 0.1;
-	new_y = game->player->y + game->player->dx * 0.1;
+	new_x = game->player->x - game->player->dy * MOVE_SPEED;
+	new_y = game->player->y + game->player->dx * MOVE_SPEED;
 	if (is_valid_position(game, new_x, new_y))
 	{
 		game->player->x = new_x;
@@ -45,7 +45,7 @@ void	move_right(t_game *game)
 /* Rotate player view to the right */
 void	rotate_right(t_game *game)
 {
-	game->player->angle += 0.1;
+	game->player->angle += ROTATION_SPEED;
 	if (game->player->angle >= 2 * PI)
 		game->player->angle -= 2 * PI;
 	game->player->dx = cos(game->player->angle);

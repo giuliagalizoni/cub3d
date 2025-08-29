@@ -49,6 +49,21 @@
 # define PI 3.14159265359
 # define DR 0.0174533
 
+/* Movement settings */
+# define MOVE_SPEED 0.08
+# define ROTATION_SPEED 0.05
+
+/* Key state structure */
+typedef struct s_keys
+{
+	int	w;
+	int	a;
+	int	s;
+	int	d;
+	int	left;
+	int	right;
+}	t_keys;
+
 /* Player structure */
 typedef struct s_player
 {
@@ -98,6 +113,7 @@ typedef struct s_game
 	void		*win;
 	t_img		screen;
 	t_player	*player; // this needs to be a pointer, no?
+	t_keys		keys;
 	t_map		*map;
 	t_textures	*textures;
 // move this to the struct?
@@ -126,6 +142,8 @@ void	put_pixel(t_img *img, int x, int y, int color);
 
 /* Function prototypes - Input handling */
 int		handle_keypress(int keycode, t_game *game);
+int		handle_keyrelease(int keycode, t_game *game);
+void	update_movement(t_game *game);
 void	move_forward(t_game *game);
 void	move_backward(t_game *game);
 void	move_left(t_game *game);
