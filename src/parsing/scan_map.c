@@ -34,6 +34,7 @@ int	scan_map(t_map *map)
 				map->player_dir = map->arr[y][x];
 				map->player_x = x;
 				map->player_y = y;
+				map->arr[y][x] = '0';
 			}
 			x++;
 		}
