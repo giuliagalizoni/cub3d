@@ -1,6 +1,6 @@
 #include "../../include/cub3d.h"
 
-char **copy_arr(char **arr, int size)
+char	**copy_arr(char **arr, int size)
 {
 	char	**new_arr;
 	int		i;
@@ -62,7 +62,8 @@ void	validade_map(t_game *game)
 		exit(EXIT_FAILURE);
 	}
 	map_copy = copy_arr(map->arr, map->height);
-	if (!flood_fill(map_copy, map->player_x, map->player_y, map->height, map->width))
+	if (!flood_fill(map_copy, map->player_x,
+			map->player_y, map->height, map->width))
 	{
 		ft_printf("There's a whole in the map :(\n");
 		free_arr(map_copy);

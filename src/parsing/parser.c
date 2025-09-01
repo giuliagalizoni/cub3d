@@ -1,7 +1,5 @@
 #include "../../include/cub3d.h"
 
-
-
 static int	check_ext(char *path)
 {
 	int	len;
@@ -33,4 +31,3 @@ void	parser(char *path, t_game *game)
 	read_cub(path, game);
 	validade_map(game);
 }
-

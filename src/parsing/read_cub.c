@@ -65,20 +65,19 @@ static int	parse_rgb(char *rgb_str)
 static void	set_rgb(t_game *game, int *field, char *rgb_str, char *id)
 {
 	if (*field != -1)
-		{
-			ft_printf("Error: Duplicate identifier for %s\n", id);
-			cleanup_game(game);
-			exit(EXIT_FAILURE); //TODO: cleanup;
-		}
+	{
+		ft_printf("Error: Duplicate identifier for %s\n", id);
+		cleanup_game(game);
+		exit(EXIT_FAILURE); //TODO: cleanup;
+	}
 	*field = parse_rgb(rgb_str);
-
 }
 
 char	*get_first_word(char *line)
 {
-	int i;
-	int start;
-	int end;
+	int	i;
+	int	start;
+	int	end;
 
 	i = 0;
 	while (line[i] == ' ' || line[i] == '\t') // do I need this, since I have trimmed the line first? maybe it's better to do it only here;
@@ -160,7 +159,7 @@ void	read_cub(char *path, t_game *game)
 	{
 		parse_result = parse_config_line(line, game);
 		if (parse_result == -1)
-			break;
+			break ;
 		free(line);
 		line = get_next_line(fd);
 	}
@@ -171,7 +170,6 @@ void	read_cub(char *path, t_game *game)
 			free(line);
 		// The "still reachable" memory is in get_next_line's internal static buffer.
         // To free it, you must exhaust the file descriptor by calling GNL until it returns NULL.
-
         exhaust_gnl(fd);
 		cleanup_parsing(game);
 		close(fd);
