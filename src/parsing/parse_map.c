@@ -54,7 +54,7 @@ static char	**push_to_arr(char **arr, int size, char *line)
 
 	if (is_equal(line, "\n"))
 	{
-		ft_printf("Error: empty line");
+		ft_perror("Error: empty line");
 		free_arr(arr); // this is needed?
 		// TODO: cleanup free arr function
 		return (NULL);

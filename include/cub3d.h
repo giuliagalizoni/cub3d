@@ -155,5 +155,6 @@ void	set_default_colors(t_game *game);
 void	free_arr(char **arr);
 void	cleanup_parsing(t_game *game);
 void	exhaust_gnl(int fd);
+void	ft_perror(char *err_message);
 
 #endif

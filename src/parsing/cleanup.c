@@ -57,3 +57,10 @@ void	cleanup_parsing(t_game *game)
 	if (game->player)
 		free(game->player);
 }
+
+void	ft_perror(char *err_message)
+{
+	write(2, "Error: ", 7);
+	write(2, err_message, ft_strlen(err_message));
+	write(2, "\n", 1);
+}
