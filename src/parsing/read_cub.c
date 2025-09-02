@@ -9,14 +9,10 @@ int	is_equal(char *str1, char *str2)
 	return (0);
 }
 
-static void	set_texture(t_game *game, char **field, char *path, char *id)
+static void	set_texture(t_game *game, char **field, char *path)
 {
 	if (*field)
-	{
-		ft_printf("Error: Duplicate texture identifier for %s\n", id);
-		cleanup_game(game);
-		exit(EXIT_FAILURE);
-	}
+		error_exit(ERR_DUPLICATE_ID, game);
 	*field = ft_strdup(path);
 }
 
@@ -32,7 +28,7 @@ static int	arr_size(char **arr)
 	return (i);
 }
 
-static int	parse_rgb(char *rgb_str)
+static int	parse_rgb(char *rgb_str, t_game *game)
 {
 	int	r;
 	int	g;
@@ -42,35 +38,24 @@ static int	parse_rgb(char *rgb_str)
 	rgb_arr = ft_split(rgb_str, ',');
 	if (!rgb_arr || arr_size(rgb_arr) != 3)
 	{
-		// if arr free arr
 		if (rgb_arr)
 			free_arr(rgb_arr);
-		ft_printf("Error: incorect color format\n");
-		exit(EXIT_FAILURE);
+		error_exit(ERR_INVALID_RGB, game);
 	}
-	if (!rgb_arr)
-		return (-1); // handle error and exit
 	r = ft_atoi(rgb_arr[0]);
 	g = ft_atoi(rgb_arr[1]);
 	b = ft_atoi(rgb_arr[2]);
 	free_arr(rgb_arr);
 	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-	{
-		ft_printf("Error: RGB values must be between 0 and 255.\n");
-		exit(EXIT_FAILURE);
-	}
+		error_exit(ERR_INVALID_RGB, game);
 	return ((r << 16) | (g << 8) | b);
 }
 
-static void	set_rgb(t_game *game, int *field, char *rgb_str, char *id)
+static void	set_rgb(t_game *game, int *field, char *rgb_str)
 {
 	if (*field != -1)
-	{
-		ft_printf("Error: Duplicate identifier for %s\n", id);
-		cleanup_game(game);
-		exit(EXIT_FAILURE); //TODO: cleanup;
-	}
-	*field = parse_rgb(rgb_str);
+		error_exit(ERR_DUPLICATE_ID, game);
+	*field = parse_rgb(rgb_str, game);
 }
 
 char	*get_first_word(char *line)
@@ -99,26 +84,23 @@ static int	parse_config_line(char *line, t_game *game)
 	if (!trimmed)
 		return (0);
 	if (!*trimmed)
-	{
-		free(trimmed);
-		return (0);
-	}
+		return (free(trimmed), 0);
 	id = get_first_word(trimmed);
 	value = trimmed + ft_strlen(id);
 	while (*value == ' ' || *value == '\t')
 		value++;
 	if (is_equal(id, "NO"))
-		set_texture(game, &game->textures->NO, value, "NO");
+		set_texture(game, &game->textures->NO, value);
 	else if (is_equal(id, "SO"))
-		set_texture(game, &game->textures->SO, value, "SO");
+		set_texture(game, &game->textures->SO, value);
 	else if (is_equal(id, "WE"))
-		set_texture(game, &game->textures->WE, value, "WE");
+		set_texture(game, &game->textures->WE, value);
 	else if (is_equal(id, "EA"))
-		set_texture(game, &game->textures->EA, value, "EA");
+		set_texture(game, &game->textures->EA, value);
 	else if (is_equal(id, "F"))
-		set_rgb(game, &game->textures->F, value, "F");
+		set_rgb(game, &game->textures->F, value);
 	else if (is_equal(id, "C"))
-		set_rgb(game, &game->textures->C, value, "C");
+		set_rgb(game, &game->textures->C, value);
 	else
 	{
 		free(id);
@@ -138,8 +120,6 @@ static int	is_config_all_set(t_game *game)
 		return (1);
 	return (0);
 }
-// TODO: organize all error messages (ENUM? MACROS?)
-// TODO: decide how to print errors (custom perror?)
 void	read_cub(char *path, t_game *game)
 {
 	int		fd;
@@ -149,11 +129,7 @@ void	read_cub(char *path, t_game *game)
 	fd = open(path, O_RDONLY);
 	ft_printf("path: %s\n", path);
 	if (fd < 0)
-	{
-		perror("Error opening file");
-		cleanup_game(game);
-		exit(EXIT_FAILURE);
-	}
+		error_exit(ERR_FILE_OPEN, game);
 	line = get_next_line(fd);
 	while (line)
 	{
@@ -165,22 +141,15 @@ void	read_cub(char *path, t_game *game)
 	}
 	if (!is_config_all_set(game))
 	{
-		ft_printf("Error: Invalid identifier or incomplete configuration.\n");
 		if (line)
 			free(line);
-		// The "still reachable" memory is in get_next_line's internal static buffer.
-        // To free it, you must exhaust the file descriptor by calling GNL until it returns NULL.
-        exhaust_gnl(fd);
-		cleanup_parsing(game);
-		close(fd);
-		exit(EXIT_FAILURE);
+		exhaust_gnl(fd);
+		error_exit(ERR_MISSING_CONFIG, game); // maybe change the message
 	}
 	if (!line)
 	{
-		ft_printf("Error: Map not found in file.\n");
-		cleanup_game(game);
 		close(fd);
-		exit(EXIT_FAILURE);
+		error_exit(ERR_MISSING_MAP, game);
 	}
 	parse_map(fd, line, game);
 	free(line);

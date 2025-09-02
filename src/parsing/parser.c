@@ -23,11 +23,7 @@ static int	check_ext(char *path)
 void	parser(char *path, t_game *game)
 {
 	if (!check_ext(path))
-	{
-		ft_printf("Wrong extension\n");
-		cleanup_parsing(game);
-		exit(EXIT_FAILURE);
-	}
+		error_exit(ERR_FILE_EXT, game);
 	read_cub(path, game);
 	validade_map(game);
 }

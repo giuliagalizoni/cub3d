@@ -60,6 +60,7 @@ typedef enum e_error
     ERR_INVALID_ID,
     ERR_INVALID_RGB,
     ERR_MISSING_CONFIG,
+	ERR_MISSING_MAP,
     ERR_EMPTY_LINE_MAP,
     ERR_INVALID_CHAR_MAP,
     ERR_DUPLICATE_PLAYER,
@@ -127,7 +128,7 @@ typedef struct s_game
 void	parser(char *path, t_game *game);
 void	read_cub(char *path, t_game *game);
 void	parse_map(int fd, char *first_line, t_game *game);
-int	scan_map(t_map *map);
+void	scan_map(t_map *map, t_game *game);
 void	validade_map(t_game *game);
 
 int	is_equal(char *str1, char *str2);

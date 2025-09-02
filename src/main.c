@@ -1,13 +1,13 @@
 #include "../include/cub3d.h"
 
-int	init(t_game *game)
+static void	init(t_game *game)
 {
 	game->player = malloc(sizeof(t_player));
 	if (!game->player)
-		return (0); // error handling
+		error_exit(ERR_MALLOC, game);
 	game->textures = malloc(sizeof(t_textures));
 	if (!game->textures)
-		return (0); // error handling
+		error_exit(ERR_MALLOC, game);
 	game->textures->NO = NULL;
 	game->textures->SO = NULL;
 	game->textures->WE = NULL;
@@ -16,12 +16,11 @@ int	init(t_game *game)
 	game->textures->F = -1;
 	game->map = malloc(sizeof(t_map));
 	if (!game->map)
-		return (0); // error handling
+		error_exit(ERR_MALLOC, game);
 	game->map->arr = NULL;
 	game->map->player_x = -1;
 	game->map->player_x = -1;
 	game->map->player_dir = '\0';
-	return (1);
 }
 
 /* Initialize game with test map */
@@ -46,26 +45,9 @@ void	init_test_game(t_game *game)
 	init_player(game, 3, 4, 'N');
 	// set_default_colors(game);
 }
-
 /* Main function */
-int	main(int ac, char **av)
+static void debug_prints(t_game game)
 {
-	t_game	game;
-
-		if (ac != 2)
-	{
-		ft_putstr_fd("Usage: ./cub3d file.cub\n", 2);
-		return (1);
-	}
-
-	if (!init(&game))
-	{
-		cleanup_parsing(&game);
-		return (1);
-	}
-	parser(av[1], &game);
-
-	// DEBUG
 	ft_printf("NO: %s\n", game.textures->NO);
 	ft_printf("SO: %s\n", game.textures->SO);
 	ft_printf("WE: %s\n", game.textures->WE);
@@ -76,24 +58,36 @@ int	main(int ac, char **av)
 	ft_printf("\n## MAP ARR##\n");
 	for (int i = 0; game.map->arr[i]; i++)
 		ft_printf("%s\n", game.map->arr[i]);
-
+	ft_printf("\n");
 	ft_printf("map height: %d\n", game.map->height);
 	ft_printf("map width: %d\n", game.map->width);
 	ft_printf("player position x: %d\n", game.map->player_x);
 	ft_printf("player position y: %d\n", game.map->player_y);
 	ft_printf("player direction: %c\n", game.map->player_dir);
+}
 
+/* Main function */
+int	main(int ac, char **av)
+{
+	t_game	game;
+
+	if (ac != 2)
+	{
+		ft_perror(ERR_USAGE);
+		return (1);
+	}
+	init(&game);
+	parser(av[1], &game);
 	init_player(&game, game.map->player_x, game.map->player_y, game.map->player_dir);
 	if (!init_window(&game))
 	{
 		cleanup_parsing(&game);
 		return (1);
 	}
-
+	debug_prints(game);
 	// conversion of rgb to mlx format -- decide where this fits better
 	game.textures->F = mlx_get_color_value(game.mlx, game.textures->F);
 	game.textures->C = mlx_get_color_value(game.mlx, game.textures->C);
-
 	if (!init_screen_image(&game))
 	{
 		cleanup_parsing(&game);

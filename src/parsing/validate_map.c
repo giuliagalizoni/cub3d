@@ -1,6 +1,6 @@
 #include "../../include/cub3d.h"
 
-char	**copy_arr(char **arr, int size)
+char	**copy_arr(char **arr, int size, t_game *game)
 {
 	char	**new_arr;
 	int		i;
@@ -9,20 +9,13 @@ char	**copy_arr(char **arr, int size)
 		return (NULL);
 	new_arr = malloc((size + 1) * sizeof(char *));
 	if (!new_arr)
-	{
-		perror("Malloc error in copy_arr");
-		exit(EXIT_FAILURE);
-	}
+		error_exit(ERR_MALLOC, game);
 	i = 0;
 	while (i < size)
 	{
 		new_arr[i] = ft_strdup(arr[i]);
 		if (!new_arr[i])
-		{
-			perror("ft_strdup error in copy_arr");
-			free_arr(new_arr);
-			exit(EXIT_FAILURE);
-		}
+			error_exit(ERR_MALLOC, game);
 		i++;
 	}
 	new_arr[size] = NULL;
@@ -55,20 +48,13 @@ void	validade_map(t_game *game)
 	t_map	*map;
 
 	map = game->map;
-	if (!scan_map(map))
-	{
-		ft_printf("Error: Invalid map content or player definition.\n");
-		cleanup_parsing(game);
-		exit(EXIT_FAILURE);
-	}
-	map_copy = copy_arr(map->arr, map->height);
+	scan_map(map, game);
+	map_copy = copy_arr(map->arr, map->height, game);
 	if (!flood_fill(map_copy, map->player_x,
 			map->player_y, map->height, map->width))
 	{
-		ft_printf("There's a whole in the map :(\n");
 		free_arr(map_copy);
-		cleanup_parsing(game);
-		exit(EXIT_FAILURE);
+		error_exit(ERR_MAP_NOT_CLOSED, game);
 	}
 	free_arr(map_copy);
 }
