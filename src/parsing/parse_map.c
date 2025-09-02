@@ -44,6 +44,7 @@ static void	pad_map(t_game *game)
 		i++;
 	}
 }
+
 static char	**push_to_arr(char **arr, int size, char *line)
 {
 	char	**new_arr;

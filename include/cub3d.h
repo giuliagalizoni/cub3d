@@ -128,6 +128,7 @@ typedef struct s_game
 /*Function prototypes - Parsing*/
 void	parser(char *path, t_game *game);
 void	read_cub(char *path, t_game *game);
+int		parse_config_line(char *line, t_game *game);
 void	parse_map(int fd, char *first_line, t_game *game);
 void	scan_map(t_map *map, t_game *game);
 void	validade_map(t_game *game);
@@ -177,5 +178,9 @@ void	cleanup_parsing(t_game *game);
 void	exhaust_gnl(int fd);
 void	ft_perror(t_error err_code, char *context);
 void	error_exit(t_error err_code, t_game *game, char *context);
+
+/* Utils */
+int	arr_size(char **arr);
+int	is_equal(char *str1, char *str2);
 
 #endif
