@@ -34,7 +34,7 @@ static void	pad_map(t_game *game)
 		{
 			new_row = malloc(game->map->width + 1);
 			if (!new_row)
-				error_exit(ERR_MALLOC, game);
+				error_exit(ERR_MALLOC, game, "pad_map");
 			ft_memcpy(new_row, game->map->arr[i], len);
 			ft_memset(new_row + len, ' ', game->map->width - len);
 			new_row[game->map->width] = '\0';
@@ -78,7 +78,7 @@ void	parse_map(int fd, char *first_line, t_game *game)
 	size = 0;
 	game->map->arr = push_to_arr(game->map->arr, size++, first_line);
 	if (!game->map->arr)
-		error_exit(ERR_MALLOC, game);
+		error_exit(ERR_MALLOC, game, "parse_map");
 	line = get_next_line(fd);
 	while (line)
 	{
@@ -87,11 +87,11 @@ void	parse_map(int fd, char *first_line, t_game *game)
 			free(first_line);
 			free(line);
 			exhaust_gnl(fd);
-			error_exit(ERR_EMPTY_LINE_MAP, game);
+			error_exit(ERR_EMPTY_LINE_MAP, game, NULL);
 		}
 		game->map->arr = push_to_arr(game->map->arr, size++, line);
 		if (!game->map->arr)
-			error_exit(ERR_MALLOC, game);
+			error_exit(ERR_MALLOC, game, "parse_map");
 		free(line);
 		line = get_next_line(fd);
 	}

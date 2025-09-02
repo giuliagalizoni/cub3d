@@ -9,13 +9,13 @@ char	**copy_arr(char **arr, int size, t_game *game)
 		return (NULL);
 	new_arr = malloc((size + 1) * sizeof(char *));
 	if (!new_arr)
-		error_exit(ERR_MALLOC, game);
+		error_exit(ERR_MALLOC, game, "copy_arr");
 	i = 0;
 	while (i < size)
 	{
 		new_arr[i] = ft_strdup(arr[i]);
 		if (!new_arr[i])
-			error_exit(ERR_MALLOC, game);
+			error_exit(ERR_MALLOC, game, "copy_arr");
 		i++;
 	}
 	new_arr[size] = NULL;
@@ -54,7 +54,7 @@ void	validade_map(t_game *game)
 			map->player_y, map->height, map->width))
 	{
 		free_arr(map_copy);
-		error_exit(ERR_MAP_NOT_CLOSED, game);
+		error_exit(ERR_MAP_NOT_CLOSED, game, NULL);
 	}
 	free_arr(map_copy);
 }

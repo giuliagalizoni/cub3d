@@ -65,7 +65,8 @@ typedef enum e_error
     ERR_INVALID_CHAR_MAP,
     ERR_DUPLICATE_PLAYER,
     ERR_MISSING_PLAYER,
-    ERR_MAP_NOT_CLOSED
+    ERR_MAP_NOT_CLOSED,
+	ERR_SYSTEM
 }	t_error;
 
 /* Player structure */
@@ -174,7 +175,7 @@ void	set_default_colors(t_game *game);
 void	free_arr(char **arr);
 void	cleanup_parsing(t_game *game);
 void	exhaust_gnl(int fd);
-void	ft_perror(t_error err_code);
-void	error_exit(t_error err_code, t_game *game);
+void	ft_perror(t_error err_code, char *context);
+void	error_exit(t_error err_code, t_game *game, char *context);
 
 #endif

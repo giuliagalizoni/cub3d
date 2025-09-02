@@ -4,12 +4,12 @@ static void	init(t_game *game)
 {
 	game->player = malloc(sizeof(t_player));
 	if (!game->player)
-		error_exit(ERR_MALLOC, game);
+		error_exit(ERR_MALLOC, game, "player");
 	game->screen.img = NULL;
 	game->win = NULL;
 	game->textures = malloc(sizeof(t_textures));
 	if (!game->textures)
-		error_exit(ERR_MALLOC, game);
+		error_exit(ERR_MALLOC, game, "textures");
 	game->textures->NO = NULL;
 	game->textures->SO = NULL;
 	game->textures->WE = NULL;
@@ -18,7 +18,7 @@ static void	init(t_game *game)
 	game->textures->F = -1;
 	game->map = malloc(sizeof(t_map));
 	if (!game->map)
-		error_exit(ERR_MALLOC, game);
+		error_exit(ERR_MALLOC, game, "map");
 	game->map->arr = NULL;
 	game->map->player_x = -1;
 	game->map->player_x = -1;
@@ -75,7 +75,7 @@ int	main(int ac, char **av)
 
 	if (ac != 2)
 	{
-		ft_perror(ERR_USAGE);
+		ft_perror(ERR_USAGE, NULL);
 		return (1);
 	}
 	init(&game);
