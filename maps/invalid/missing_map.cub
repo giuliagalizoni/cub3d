@@ -1,0 +1,8 @@
+F 0,255,0
+C 225,0,0
+
+NO ./north.xpm
+SO ./south.xpm
+WE ./west.xpm
+EA ./east.xpm
+
