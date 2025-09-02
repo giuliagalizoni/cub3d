@@ -49,6 +49,24 @@
 # define PI 3.14159265359
 # define DR 0.0174533
 
+/* Error Codes Enum */
+typedef enum e_error
+{
+    ERR_USAGE,
+    ERR_MALLOC,
+    ERR_FILE_EXT,
+    ERR_FILE_OPEN,
+    ERR_DUPLICATE_ID,
+    ERR_INVALID_ID,
+    ERR_INVALID_RGB,
+    ERR_MISSING_CONFIG,
+    ERR_EMPTY_LINE_MAP,
+    ERR_INVALID_CHAR_MAP,
+    ERR_DUPLICATE_PLAYER,
+    ERR_MISSING_PLAYER,
+    ERR_MAP_NOT_CLOSED
+}	t_error;
+
 /* Player structure */
 typedef struct s_player
 {
@@ -155,6 +173,7 @@ void	set_default_colors(t_game *game);
 void	free_arr(char **arr);
 void	cleanup_parsing(t_game *game);
 void	exhaust_gnl(int fd);
-void	ft_perror(char *err_message);
+void	ft_perror(t_error err_code);
+void	error_exit(t_error err_code, t_game *game);
 
 #endif

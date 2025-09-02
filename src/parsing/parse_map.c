@@ -34,10 +34,7 @@ static void	pad_map(t_game *game)
 		{
 			new_row = malloc(game->map->width + 1);
 			if (!new_row)
-			{
-
-				exit(EXIT_FAILURE); // TODO: cleanup
-			}
+				error_exit(ERR_MALLOC, game);
 			ft_memcpy(new_row, game->map->arr[i], len);
 			ft_memset(new_row + len, ' ', game->map->width - len);
 			new_row[game->map->width] = '\0';
@@ -52,13 +49,6 @@ static char	**push_to_arr(char **arr, int size, char *line)
 	char	**new_arr;
 	int		i;
 
-	if (is_equal(line, "\n"))
-	{
-		ft_perror("Error: empty line");
-		free_arr(arr); // this is needed?
-		// TODO: cleanup free arr function
-		return (NULL);
-	}
 	new_arr = malloc(sizeof(char *) * (size + 2));
 	if (!new_arr)
 		return (NULL);
@@ -71,9 +61,7 @@ static char	**push_to_arr(char **arr, int size, char *line)
 	new_arr[size] = ft_strtrim(line, "\n");
 	if (!new_arr[size])
 	{
-		// handle error
 		free_arr(new_arr);
-		perror("malloc error strtrim");
 		return NULL;
 	}
 	new_arr[size + 1] = NULL;
@@ -90,30 +78,20 @@ void	parse_map(int fd, char *first_line, t_game *game)
 	size = 0;
 	game->map->arr = push_to_arr(game->map->arr, size++, first_line);
 	if (!game->map->arr)
-	{
-		perror("malloc"); // TODO: wrapper function
-		exit(EXIT_FAILURE);
-	}
-
+		error_exit(ERR_MALLOC, game);
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (line[0] == '\n') // Skip empty lines after the map starts
+		if (line[0] == '\n')
 		{
-			ft_printf("Error: Empty line inside map definition.\n");
 			free(first_line);
 			free(line);
-        	exhaust_gnl(fd);
-			cleanup_parsing(game);
-			close(fd);
-			exit(EXIT_FAILURE);
+			exhaust_gnl(fd);
+			error_exit(ERR_EMPTY_LINE_MAP, game);
 		}
 		game->map->arr = push_to_arr(game->map->arr, size++, line);
 		if (!game->map->arr)
-		{
-			perror("malloc"); // TODO: wrapper function
-			exit(EXIT_FAILURE);
-		}
+			error_exit(ERR_MALLOC, game);
 		free(line);
 		line = get_next_line(fd);
 	}
