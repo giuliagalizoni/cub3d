@@ -127,8 +127,8 @@ void	read_cub(char *path, t_game *game)
 	int		parse_result;
 
 	fd = open(path, O_RDONLY);
-	ft_printf("path: %s\n", path);
 	if (fd < 0)
+		perror(path);
 		error_exit(ERR_FILE_OPEN, game);
 	line = get_next_line(fd);
 	while (line)

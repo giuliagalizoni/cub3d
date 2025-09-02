@@ -5,6 +5,8 @@ static void	init(t_game *game)
 	game->player = malloc(sizeof(t_player));
 	if (!game->player)
 		error_exit(ERR_MALLOC, game);
+	game->screen.img = NULL;
+	game->win = NULL;
 	game->textures = malloc(sizeof(t_textures));
 	if (!game->textures)
 		error_exit(ERR_MALLOC, game);
