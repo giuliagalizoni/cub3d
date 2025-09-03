@@ -1,46 +1,60 @@
 #include "../../include/cub3d.h"
 
-/*TODO validate:
-- walls
-- blank spaces
-- invalid chars
-*/
-
-int	check_walls(char **map)
+char	**copy_arr(char **arr, int size, t_game *game)
 {
-	int	i;
-	int	j;
+	char	**new_arr;
+	int		i;
 
+	if (!arr)
+		return (NULL);
+	new_arr = malloc((size + 1) * sizeof(char *));
+	if (!new_arr)
+		error_exit(ERR_MALLOC, game, "copy_arr");
 	i = 0;
-	while (map[i])
+	while (i < size)
 	{
-		j = 0;
-		while (map[i][j])
-		{
-			if (map[i][j] == '0' || ft_strchr("NSEW", map[i][j]))
-			{
-				 if (!map[i - 1] || !map[i + 1] ||
-					j >= (int)ft_strlen(map[i - 1]) ||
-					j >= (int)ft_strlen(map[i + 1]) ||
-					map[i - 1][j] == ' ' || map[i + 1][j] == ' ' ||
-					map[i][j - 1] == ' ' || map[i][j + 1] == ' ')
-					return (0);
-			}
-			j++;
-		}
+		new_arr[i] = ft_strdup(arr[i]);
+		if (!new_arr[i])
+			error_exit(ERR_MALLOC, game, "copy_arr");
 		i++;
 	}
+	new_arr[size] = NULL;
+	return (new_arr);
+}
+
+int	flood_fill(char **map, int x, int y, int height, int width)
+{
+	if (y < 0 || y >= height || x < 0 || x >= width)
+		return (0);
+	if (map[y][x] == ' ')
+		return (0);
+	if (map[y][x] == '1' || map[y][x] == 'V')
+		return (1);
+	map[y][x] = 'V';
+	if (!flood_fill(map, x + 1, y, height, width))
+		return (0);
+	if (!flood_fill(map, x - 1, y, height, width))
+		return (0);
+	if (!flood_fill(map, x, y + 1, height, width))
+		return (0);
+	if (!flood_fill(map, x, y - 1, height, width))
+		return (0);
 	return (1);
 }
 
-void	validade_map(t_map *map)
+void	validade_map(t_game *game)
 {
-	if (!scan_map(map))
-		exit(EXIT_FAILURE); //cleanup
-	if (!check_walls(map->arr))
+	char	**map_copy;
+	t_map	*map;
+
+	map = game->map;
+	scan_map(map, game);
+	map_copy = copy_arr(map->arr, map->height, game);
+	if (!flood_fill(map_copy, map->player_x,
+			map->player_y, map->height, map->width))
 	{
-		ft_printf("There's a whole in the map :(\n");
-		// cleanup
-		exit(EXIT_FAILURE);
+		free_arr(map_copy);
+		error_exit(ERR_MAP_NOT_CLOSED, game, NULL);
 	}
+	free_arr(map_copy);
 }

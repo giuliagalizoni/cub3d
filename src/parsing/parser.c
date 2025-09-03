@@ -1,7 +1,5 @@
 #include "../../include/cub3d.h"
 
-
-
 static int	check_ext(char *path)
 {
 	int	len;
@@ -25,11 +23,7 @@ static int	check_ext(char *path)
 void	parser(char *path, t_game *game)
 {
 	if (!check_ext(path))
-	{
-		ft_printf("Wrong extension\n");
-		return ; // figure out exit and error printing
-	}
+		error_exit(ERR_FILE_EXT, game, path);
 	read_cub(path, game);
-	validade_map(game->map);
+	validade_map(game);
 }
-
