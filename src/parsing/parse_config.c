@@ -2,10 +2,10 @@
 
 static int	parse_rgb(char *rgb_str, t_game *game)
 {
-	int	r;
-	int	g;
-	int	b;
-	char **rgb_arr;
+	int		r;
+	int		g;
+	int		b;
+	char	**rgb_arr;
 
 	rgb_arr = ft_split(rgb_str, ',');
 	if (!rgb_arr || arr_size(rgb_arr) != 3)

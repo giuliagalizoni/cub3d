@@ -2,10 +2,10 @@
 
 void	get_dimensions(t_map *map)
 {
-	char **arr = map->arr;
-	int	y;
-	int	x;
-	int	width;
+	char	**arr = map->arr;
+	int		y;
+	int		x;
+	int		width;
 
 	y = 0;
 	width = 0;
@@ -63,7 +63,7 @@ static char	**push_to_arr(char **arr, int size, char *line)
 	if (!new_arr[size])
 	{
 		free_arr(new_arr);
-		return NULL;
+		return (NULL);
 	}
 	new_arr[size + 1] = NULL;
 	if (arr)
