@@ -133,8 +133,6 @@ void	parse_map(int fd, char *first_line, t_game *game);
 void	scan_map(t_map *map, t_game *game);
 void	validade_map(t_game *game);
 
-int	is_equal(char *str1, char *str2);
-
 /* Function prototypes - Window management */
 int		init_window(t_game *game);
 int		close_window(t_game *game);
@@ -180,7 +178,7 @@ void	ft_perror(t_error err_code, char *context);
 void	error_exit(t_error err_code, t_game *game, char *context);
 
 /* Utils */
-int	arr_size(char **arr);
-int	is_equal(char *str1, char *str2);
+int		arr_size(char **arr);
+int		is_equal(char *str1, char *str2);
 
 #endif
