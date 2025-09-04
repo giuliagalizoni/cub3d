@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:39:11 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/04 16:46:46 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/04 18:45:14 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@
 void	cast_rays(t_game *game)
 {
 	int		x;
-	double	ray_angle;
-	double	distance;
+	double	camera_x;
+	double	ray_dir_x;
+	double	ray_dir_y;
+	double	wall_dist;
 	double	wall_height;
 	int		wall_side;
 	double	wall_x;
@@ -25,12 +27,17 @@ void	cast_rays(t_game *game)
 	x = 0;
 	while (x < WIN_WIDTH)
 	{
-		ray_angle = calculate_ray_angle(game, x);
-		distance = cast_ray_dda(game, ray_angle, &wall_side, &wall_x);
-		// Apply fisheye correction
-		distance = distance * cos(ray_angle - game->player->angle);
-		wall_height = calculate_wall_height(distance);
-		draw_wall_slice_textured(game, x, wall_height, wall_side, ray_angle, wall_x);
+		// Calculate camera position (-1 to 1)
+		camera_x = 2 * x / (double)WIN_WIDTH - 1;
+
+		// Calculate ray direction
+		ray_dir_x = game->player->dx + game->player->plane_x * camera_x;
+		ray_dir_y = game->player->dy + game->player->plane_y * camera_x;
+
+		wall_dist = cast_ray_dda_standard(game, ray_dir_x, ray_dir_y, &wall_side, &wall_x);
+		// Use the same wall height calculation as the working project
+		wall_height = (int)(WIN_HEIGHT / wall_dist);
+		draw_wall_slice_textured(game, x, wall_height, wall_side, ray_dir_x, ray_dir_y, wall_x);
 		x++;
 	}
 }
@@ -69,11 +76,9 @@ double	cast_single_ray(t_game *game, double ray_angle)
 	return (distance * cos(ray_angle - game->player->angle));
 }
 
-/* Cast ray with DDA algorithm for better precision */
-double	cast_ray_dda(t_game *game, double ray_angle, int *wall_side, double *wall_x)
+/* Cast ray with DDA algorithm using standard ray direction */
+double	cast_ray_dda_standard(t_game *game, double ray_dir_x, double ray_dir_y, int *wall_side, double *wall_x)
 {
-	double	ray_dir_x;
-	double	ray_dir_y;
 	double	delta_dist_x;
 	double	delta_dist_y;
 	double	side_dist_x;
@@ -85,8 +90,6 @@ double	cast_ray_dda(t_game *game, double ray_angle, int *wall_side, double *wall
 	int		hit;
 	double	perp_wall_dist;
 
-	ray_dir_x = cos(ray_angle);
-	ray_dir_y = sin(ray_angle);
 	map_x = (int)game->player->x;
 	map_y = (int)game->player->y;
 	delta_dist_x = fabs(1 / ray_dir_x);
@@ -129,16 +132,17 @@ double	cast_ray_dda(t_game *game, double ray_angle, int *wall_side, double *wall
 		if (is_wall(game, map_x, map_y))
 			hit = 1;
 	}
+	// Calculate perpendicular wall distance
 	if (*wall_side == 0)
-	{
-		perp_wall_dist = (map_x - game->player->x + (1 - step_x) / 2.0) / ray_dir_x;
-		*wall_x = game->player->y + perp_wall_dist * ray_dir_y;
-	}
+		perp_wall_dist = (side_dist_x - delta_dist_x);
 	else
-	{
-		perp_wall_dist = (map_y - game->player->y + (1 - step_y) / 2.0) / ray_dir_y;
+		perp_wall_dist = (side_dist_y - delta_dist_y);
+
+	// Calculate wall_x for texture mapping
+	if (*wall_side == 0)
+		*wall_x = game->player->y + perp_wall_dist * ray_dir_y;
+	else
 		*wall_x = game->player->x + perp_wall_dist * ray_dir_x;
-	}
 	*wall_x -= floor(*wall_x);
 	return (perp_wall_dist);
 }

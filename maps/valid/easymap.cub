@@ -1,6 +1,6 @@
 F 0,   160,240
 
-		NO ./assets/north.xpm
+NO ./assets/north.xpm
 SO ./assets/south.xpm
 C 100,200, 50
 WE ./assets/west.xpm

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:38:59 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/04 16:13:56 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/04 18:43:04 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,20 @@ void	move_right(t_game *game)
 /* Rotate player view to the right */
 void	rotate_right(t_game *game)
 {
+	double	old_dx;
+	double	old_plane_x;
+
+	old_dx = game->player->dx;
+	old_plane_x = game->player->plane_x;
 	game->player->angle += ROTATION_SPEED;
 	if (game->player->angle >= 2 * PI)
 		game->player->angle -= 2 * PI;
-	game->player->dx = cos(game->player->angle);
-	game->player->dy = sin(game->player->angle);
+	// Rotate direction vector
+	game->player->dx = old_dx * cos(ROTATION_SPEED) - game->player->dy * sin(ROTATION_SPEED);
+	game->player->dy = old_dx * sin(ROTATION_SPEED) + game->player->dy * cos(ROTATION_SPEED);
+	// Rotate camera plane
+	game->player->plane_x = old_plane_x * cos(ROTATION_SPEED) - game->player->plane_y * sin(ROTATION_SPEED);
+	game->player->plane_y = old_plane_x * sin(ROTATION_SPEED) + game->player->plane_y * cos(ROTATION_SPEED);
 }
 
 /* Check if position is valid (not a wall) */

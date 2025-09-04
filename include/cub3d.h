@@ -92,6 +92,8 @@ typedef struct s_player
 	double	angle;
 	double	dx;
 	double	dy;
+	double	plane_x;
+	double	plane_y;
 	char	direction;
 }	t_player;
 
@@ -184,10 +186,10 @@ void	draw_floor_ceiling(t_game *game);
 void	cast_rays(t_game *game);
 double	calculate_ray_angle(t_game *game, int x);
 double	cast_single_ray(t_game *game, double ray_angle);
-double	cast_ray_dda(t_game *game, double ray_angle, int *wall_side, double *wall_x);
+double	cast_ray_dda_standard(t_game *game, double ray_dir_x, double ray_dir_y, int *wall_side, double *wall_x);
 double	calculate_wall_height(double distance);
 void	draw_wall_slice(t_game *game, int x, double wall_height);
-void	draw_wall_slice_textured(t_game *game, int x, double wall_height, int wall_side, double ray_angle, double wall_x);
+void	draw_wall_slice_textured(t_game *game, int x, double wall_height, int wall_side, double ray_dir_x, double ray_dir_y, double wall_x);
 int		is_wall(t_game *game, int x, int y);
 
 /* Function prototypes - Game initialization */
@@ -200,7 +202,9 @@ int		load_all_textures(t_game *game);
 void	free_textures(t_game *game);
 t_img	*get_wall_texture(t_game *game, int wall_side);
 t_img	*get_wall_texture_advanced(t_game *game, int wall_side, double ray_angle);
+t_img	*get_wall_texture_by_direction(t_game *game, int wall_side, double ray_dir_x, double ray_dir_y);
 int		calculate_texture_x(t_img *texture, double wall_x);
+int		calculate_texture_x_with_flip(t_img *texture, double wall_x, int wall_side, double ray_dir_x, double ray_dir_y);
 int		calculate_texture_y(t_img *texture, int y, int wall_start, int wall_height);
 int		get_texture_pixel(t_img *texture, int x, int y);
 double	calculate_wall_x(t_game *game, double ray_angle, int wall_side);

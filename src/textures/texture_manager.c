@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_manager.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 02:00:00 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/04 16:48:05 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/04 18:49:08 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ t_img	*get_wall_texture_advanced(t_game *game, int wall_side, double ray_angle)
 {
 	double	ray_dir_x;
 	double	ray_dir_y;
-	
+
 	ray_dir_x = cos(ray_angle);
 	ray_dir_y = sin(ray_angle);
-	
+
 	// wall_side: 0 = East/West wall (vertical), 1 = North/South wall (horizontal)
 	// 根据ray的方向确定wall的实际方向，然后选择对应的texture
 	if (wall_side == 0) // East/West wall (vertical)
@@ -53,7 +53,7 @@ t_img	*get_wall_texture_advanced(t_game *game, int wall_side, double ray_angle)
 t_img	*get_wall_texture_by_type(t_game *game, char wall_type, int wall_side, double ray_angle)
 {
 	t_img	*base_texture;
-	
+
 	base_texture = get_wall_texture_advanced(game, wall_side, ray_angle);
 	if (wall_type == '1')
 		return (base_texture);
@@ -67,12 +67,49 @@ t_img	*get_wall_texture_by_type(t_game *game, char wall_type, int wall_side, dou
 		return (base_texture);
 }
 
+/* Get texture based on wall side and ray direction using standard method */
+t_img	*get_wall_texture_by_direction(t_game *game, int wall_side, double ray_dir_x, double ray_dir_y)
+{
+	// wall_side: 0 = East/West wall (vertical), 1 = North/South wall (horizontal)
+	// Texture mapping: imgs[0]=NO, imgs[1]=SO, imgs[2]=WE, imgs[3]=EA
+	if (wall_side == 0) // East/West wall (vertical)
+	{
+		if (ray_dir_x < 0)
+			return (&game->textures->imgs[2]); // West texture (WE)
+		else
+			return (&game->textures->imgs[3]); // East texture (EA)
+	}
+	else // North/South wall (horizontal)
+	{
+		if (ray_dir_y > 0)
+			return (&game->textures->imgs[1]); // South texture (SO)
+		else
+			return (&game->textures->imgs[0]); // North texture (NO)
+	}
+}
+
 /* Calculate texture X coordinate */
 int	calculate_texture_x(t_img *texture, double wall_x)
 {
 	int	tex_x;
 
 	tex_x = (int)(wall_x * (double)texture->width);
+	if (tex_x < 0)
+		tex_x = 0;
+	else if (tex_x >= texture->width)
+		tex_x = texture->width - 1;
+	return (tex_x);
+}
+
+/* Calculate texture X coordinate with direction flip */
+int	calculate_texture_x_with_flip(t_img *texture, double wall_x, int wall_side, double ray_dir_x, double ray_dir_y)
+{
+	int	tex_x;
+
+	tex_x = (int)(wall_x * (double)texture->width);
+	// Apply texture flip based on ray direction - try inverted logic
+	if ((wall_side == 0 && ray_dir_x > 0) || (wall_side == 1 && ray_dir_y < 0))
+		tex_x = texture->width - tex_x - 1;
 	if (tex_x < 0)
 		tex_x = 0;
 	else if (tex_x >= texture->width)

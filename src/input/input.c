@@ -58,7 +58,7 @@ void	update_movement(t_game *game)
 		rotate_left(game);
 	if (game->keys.right)
 		rotate_right(game);
-	
+
 	// Handle movement
 	if (game->keys.w)
 		move_forward(game);
@@ -103,9 +103,18 @@ void	move_backward(t_game *game)
 /* Rotate player view to the left */
 void	rotate_left(t_game *game)
 {
+	double	old_dx;
+	double	old_plane_x;
+
+	old_dx = game->player->dx;
+	old_plane_x = game->player->plane_x;
 	game->player->angle -= ROTATION_SPEED;
 	if (game->player->angle < 0)
 		game->player->angle += 2 * PI;
-	game->player->dx = cos(game->player->angle);
-	game->player->dy = sin(game->player->angle);
+	// Rotate direction vector
+	game->player->dx = old_dx * cos(-ROTATION_SPEED) - game->player->dy * sin(-ROTATION_SPEED);
+	game->player->dy = old_dx * sin(-ROTATION_SPEED) + game->player->dy * cos(-ROTATION_SPEED);
+	// Rotate camera plane
+	game->player->plane_x = old_plane_x * cos(-ROTATION_SPEED) - game->player->plane_y * sin(-ROTATION_SPEED);
+	game->player->plane_y = old_plane_x * sin(-ROTATION_SPEED) + game->player->plane_y * cos(-ROTATION_SPEED);
 }
