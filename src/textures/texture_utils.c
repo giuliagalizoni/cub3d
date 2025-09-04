@@ -11,14 +11,25 @@ int	determine_wall_side(t_game *game, double ray_angle, int map_x, int map_y)
 	(void)map_y;
 	ray_dir_x = cos(ray_angle);
 	ray_dir_y = sin(ray_angle);
-	if (ray_dir_x > 0)
-		side = 3; // East
+	
+	// Determine wall side based on ray direction
+	// This is a simplified version - the actual side should be determined by DDA
+	if (fabs(ray_dir_x) > fabs(ray_dir_y))
+	{
+		// Vertical wall (East/West)
+		if (ray_dir_x > 0)
+			side = 3; // East
+		else
+			side = 2; // West
+	}
 	else
-		side = 2; // West
-	if (ray_dir_y > 0)
-		side = 1; // South
-	else
-		side = 0; // North
+	{
+		// Horizontal wall (North/South)
+		if (ray_dir_y > 0)
+			side = 1; // South
+		else
+			side = 0; // North
+	}
 	return (side);
 }
 

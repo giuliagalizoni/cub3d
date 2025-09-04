@@ -160,6 +160,7 @@ int		close_window(t_game *game);
 void	cleanup_game(t_game *game);
 
 /* Function prototypes - Rendering */
+int		init_rendering(t_game *game);
 int		render_frame(t_game *game);
 void	clear_image(t_img *img, int color);
 void	put_pixel(t_img *img, int x, int y, int color);
@@ -199,6 +200,7 @@ void	set_default_colors(t_game *game);
 /* Function prototypes - Textures */
 int		load_texture(t_game *game, t_img *texture, char *path);
 int		load_all_textures(t_game *game);
+int		load_textures(t_game *game);
 void	free_textures(t_game *game);
 t_img	*get_wall_texture(t_game *game, int wall_side);
 t_img	*get_wall_texture_advanced(t_game *game, int wall_side, double ray_angle);

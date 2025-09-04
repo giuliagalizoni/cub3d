@@ -54,7 +54,7 @@ void	init_test_game(t_game *game)
 	game->map->width = 9;
 	game->map->height = 9;
 	init_player(game, 3, 4, 'N');
-	// set_default_colors(game);
+	set_default_colors(game);
 }
 /* Main function */
 static void debug_prints(t_game game)
@@ -96,9 +96,9 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	debug_prints(game);
-	// conversion of rgb to mlx format -- decide where this fits better
-	game.textures->F = mlx_get_color_value(game.mlx, game.textures->F);
-	game.textures->C = mlx_get_color_value(game.mlx, game.textures->C);
+	// Set floor and ceiling colors
+	game.floor_color = mlx_get_color_value(game.mlx, game.textures->F);
+	game.ceiling_color = mlx_get_color_value(game.mlx, game.textures->C);
 	if (!load_all_textures(&game))
 	{
 		ft_printf("Error: Failed to load textures\n");

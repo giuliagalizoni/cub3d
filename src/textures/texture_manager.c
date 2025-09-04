@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_manager.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 02:00:00 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/04 18:49:08 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/04 19:01:08 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,10 @@ int	calculate_texture_x_with_flip(t_img *texture, double wall_x, int wall_side, 
 	int	tex_x;
 
 	tex_x = (int)(wall_x * (double)texture->width);
-	// Apply texture flip based on ray direction - try inverted logic
-	if ((wall_side == 0 && ray_dir_x > 0) || (wall_side == 1 && ray_dir_y < 0))
+	// Apply texture flip based on ray direction
+	// For vertical walls (wall_side == 0): flip when ray goes west (ray_dir_x < 0)
+	// For horizontal walls (wall_side == 1): flip when ray goes north (ray_dir_y < 0)
+	if ((wall_side == 0 && ray_dir_x < 0) || (wall_side == 1 && ray_dir_y < 0))
 		tex_x = texture->width - tex_x - 1;
 	if (tex_x < 0)
 		tex_x = 0;
@@ -134,7 +136,7 @@ int	calculate_texture_y(t_img *texture, int y, int wall_start, int wall_height)
 	return (tex_y);
 }
 
-/* Get pixel color from texture */
+/* Get pixel color from texture at given coordinates */
 int	get_texture_pixel(t_img *texture, int x, int y)
 {
 	char	*dst;
@@ -142,7 +144,9 @@ int	get_texture_pixel(t_img *texture, int x, int y)
 
 	if (x < 0 || x >= texture->width || y < 0 || y >= texture->height)
 		return (0);
-	dst = texture->addr + (y * texture->line_length + x * (texture->bits_per_pixel / 8));
-	color = *(unsigned int*)dst;
+	dst = texture->addr + (y * texture->line_length + x
+			* (texture->bits_per_pixel / 8));
+	color = *(unsigned int *)dst;
 	return (color);
 }
+

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wall_drawing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 06:48:28 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/04 18:45:14 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/04 19:01:06 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,17 @@ void	draw_wall_slice_textured(t_game *game, int x, double wall_height, int wall_
 		return;
 	}
 	tex_x = calculate_texture_x_with_flip(texture, wall_x, wall_side, ray_dir_x, ray_dir_y);
-	// Use step-based texture mapping like the working project
-	tex_step = 1.0 * texture->height / wall_height;
-	tex_pos = (start_y - WIN_HEIGHT / 2 + wall_height / 2) * tex_step;
+	// Use step-based texture mapping
+	tex_step = (double)texture->height / wall_height;
+	tex_pos = (start_y - WIN_HEIGHT / 2.0 + wall_height / 2.0) * tex_step;
 	y = start_y;
 	while (y <= end_y)
 	{
-		tex_y = (int)tex_pos & (texture->height - 1);
+		tex_y = (int)tex_pos;
+		if (tex_y < 0)
+			tex_y = 0;
+		else if (tex_y >= texture->height)
+			tex_y = texture->height - 1;
 		tex_pos += tex_step;
 		color = get_texture_pixel(texture, tex_x, tex_y);
 		put_pixel(&game->screen, x, y, color);
@@ -129,6 +133,6 @@ void	init_player(t_game *game, double x, double y, char direction)
 /* Set default floor and ceiling colors */
 void	set_default_colors(t_game *game)
 {
-	game->floor_color = 0x654321;
-	game->ceiling_color = 0x87CEEB;
+	game->floor_color = 0x8B4513;    // Saddle Brown (darker brown)
+	game->ceiling_color = 0x87CEEB;  // Sky Blue (light blue)
 }
