@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wall_drawing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 06:48:28 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/22 12:07:08 by giuliagaliz      ###   ########.fr       */
+/*   Updated: 2025/09/04 16:18:54 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,40 @@ void	draw_wall_slice(t_game *game, int x, double wall_height)
 	y = start_y;
 	while (y <= end_y)
 	{
+		put_pixel(&game->screen, x, y, color);
+		y++;
+	}
+}
+
+/* Draw a textured vertical wall slice */
+void	draw_wall_slice_textured(t_game *game, int x, double wall_height, int wall_side, double ray_angle, double wall_x)
+{
+	int		start_y;
+	int		end_y;
+	int		y;
+	t_img	*texture;
+	int		tex_x;
+	int		tex_y;
+	int		color;
+
+	start_y = (WIN_HEIGHT - wall_height) / 2;
+	end_y = (WIN_HEIGHT + wall_height) / 2;
+	if (start_y < 0)
+		start_y = 0;
+	if (end_y >= WIN_HEIGHT)
+		end_y = WIN_HEIGHT - 1;
+	texture = get_wall_texture_advanced(game, wall_side, ray_angle);
+	if (!texture || !texture->img)
+	{
+		draw_wall_slice(game, x, wall_height);
+		return;
+	}
+	tex_x = calculate_texture_x(texture, wall_x);
+	y = start_y;
+	while (y <= end_y)
+	{
+		tex_y = calculate_texture_y(texture, y, start_y, wall_height);
+		color = get_texture_pixel(texture, tex_x, tex_y);
 		put_pixel(&game->screen, x, y, color);
 		y++;
 	}

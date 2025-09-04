@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:38:59 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/29 08:45:14 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/04 16:13:56 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	move_left(t_game *game)
 
 	new_x = game->player->x + game->player->dy * MOVE_SPEED;
 	new_y = game->player->y - game->player->dx * MOVE_SPEED;
-	if (is_valid_position(game, new_x, new_y))
+	if (!check_collision(game, new_x, new_y))
 	{
 		game->player->x = new_x;
 		game->player->y = new_y;
@@ -35,7 +35,7 @@ void	move_right(t_game *game)
 
 	new_x = game->player->x - game->player->dy * MOVE_SPEED;
 	new_y = game->player->y + game->player->dx * MOVE_SPEED;
-	if (is_valid_position(game, new_x, new_y))
+	if (!check_collision(game, new_x, new_y))
 	{
 		game->player->x = new_x;
 		game->player->y = new_y;
@@ -67,4 +67,31 @@ int	is_valid_position(t_game *game, double x, double y)
 	if (game->map->arr[map_y][map_x] == '1')
 		return (0);
 	return (1);
+}
+
+/* Check collision with better precision */
+int	check_collision(t_game *game, double x, double y)
+{
+	double	radius;
+	int		check_x;
+	int		check_y;
+
+	radius = 0.2;
+	check_x = (int)(x - radius);
+	check_y = (int)(y - radius);
+	if (!is_valid_position(game, check_x, check_y))
+		return (1);
+	check_x = (int)(x + radius);
+	check_y = (int)(y - radius);
+	if (!is_valid_position(game, check_x, check_y))
+		return (1);
+	check_x = (int)(x - radius);
+	check_y = (int)(y + radius);
+	if (!is_valid_position(game, check_x, check_y))
+		return (1);
+	check_x = (int)(x + radius);
+	check_y = (int)(y + radius);
+	if (!is_valid_position(game, check_x, check_y))
+		return (1);
+	return (0);
 }

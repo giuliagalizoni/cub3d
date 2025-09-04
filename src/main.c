@@ -16,6 +16,7 @@ static void	init(t_game *game)
 	game->textures->EA = NULL;
 	game->textures->C = -1;
 	game->textures->F = -1;
+	game->textures->loaded = 0;
 	game->map = malloc(sizeof(t_map));
 	if (!game->map)
 		error_exit(ERR_MALLOC, game, "map");
@@ -98,6 +99,12 @@ int	main(int ac, char **av)
 	// conversion of rgb to mlx format -- decide where this fits better
 	game.textures->F = mlx_get_color_value(game.mlx, game.textures->F);
 	game.textures->C = mlx_get_color_value(game.mlx, game.textures->C);
+	if (!load_all_textures(&game))
+	{
+		ft_printf("Error: Failed to load textures\n");
+		cleanup_parsing(&game);
+		return (1);
+	}
 	if (!init_screen_image(&game))
 	{
 		cleanup_parsing(&game);

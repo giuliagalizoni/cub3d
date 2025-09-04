@@ -115,6 +115,7 @@ typedef struct s_textures {
 	int    F; // bitwise or make a separate struct for rgb
 	int    C;
 	t_img		imgs[4];
+	int		loaded;
 } t_textures;
 
 typedef struct s_map {
@@ -172,6 +173,7 @@ void	move_right(t_game *game);
 void	rotate_left(t_game *game);
 void	rotate_right(t_game *game);
 int		is_valid_position(t_game *game, double x, double y);
+int		check_collision(t_game *game, double x, double y);
 
 /* Function prototypes - Rendering */
 int		init_screen_image(t_game *game);
@@ -182,13 +184,26 @@ void	draw_floor_ceiling(t_game *game);
 void	cast_rays(t_game *game);
 double	calculate_ray_angle(t_game *game, int x);
 double	cast_single_ray(t_game *game, double ray_angle);
+double	cast_ray_dda(t_game *game, double ray_angle, int *wall_side, double *wall_x);
 double	calculate_wall_height(double distance);
 void	draw_wall_slice(t_game *game, int x, double wall_height);
+void	draw_wall_slice_textured(t_game *game, int x, double wall_height, int wall_side, double ray_angle, double wall_x);
 int		is_wall(t_game *game, int x, int y);
 
 /* Function prototypes - Game initialization */
 void	init_player(t_game *game, double x, double y, char direction);
 void	set_default_colors(t_game *game);
+
+/* Function prototypes - Textures */
+int		load_texture(t_game *game, t_img *texture, char *path);
+int		load_all_textures(t_game *game);
+void	free_textures(t_game *game);
+t_img	*get_wall_texture(t_game *game, int wall_side);
+t_img	*get_wall_texture_advanced(t_game *game, int wall_side, double ray_angle);
+int		calculate_texture_x(t_img *texture, double wall_x);
+int		calculate_texture_y(t_img *texture, int y, int wall_start, int wall_height);
+int		get_texture_pixel(t_img *texture, int x, int y);
+double	calculate_wall_x(t_game *game, double ray_angle, int wall_side);
 
 /* Function prototypes - Cleaning */
 void	free_arr(char **arr);

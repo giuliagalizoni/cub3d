@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:22:55 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/29 08:45:14 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/04 16:13:56 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ int	close_window(t_game *game)
 /* Clean up all allocated resources */
 void	cleanup_game(t_game *game)
 {
+	if (game->textures && game->textures->loaded)
+		free_textures(game);
 	if (game->screen.img)
 		mlx_destroy_image(game->mlx, game->screen.img);
 	if (game->win)

@@ -78,7 +78,7 @@ void	move_forward(t_game *game)
 
 	new_x = game->player->x + game->player->dx * MOVE_SPEED;
 	new_y = game->player->y + game->player->dy * MOVE_SPEED;
-	if (is_valid_position(game, new_x, new_y))
+	if (!check_collision(game, new_x, new_y))
 	{
 		game->player->x = new_x;
 		game->player->y = new_y;
@@ -93,7 +93,7 @@ void	move_backward(t_game *game)
 
 	new_x = game->player->x - game->player->dx * MOVE_SPEED;
 	new_y = game->player->y - game->player->dy * MOVE_SPEED;
-	if (is_valid_position(game, new_x, new_y))
+	if (!check_collision(game, new_x, new_y))
 	{
 		game->player->x = new_x;
 		game->player->y = new_y;

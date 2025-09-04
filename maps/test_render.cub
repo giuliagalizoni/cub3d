@@ -1,12 +1,12 @@
-F 100,55,0
 NO ./assets/north.xpm
 SO ./assets/south.xpm
-C 200,100,50
 WE ./assets/west.xpm
 EA ./assets/east.xpm
+F 220,100,0
+C 225,30,0
 
-111
-101
-1N1
-101
-111
+111111
+100001
+101001
+100N01
+111111
