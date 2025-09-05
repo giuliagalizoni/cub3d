@@ -23,6 +23,9 @@ static void	init(t_game *game)
 	game->map->player_x = -1;
 	game->map->player_x = -1;
 	game->map->player_dir = '\0';
+	game->map->player_x = -1;
+	game->map->player_x = -1;
+	game->map->player_dir = '\0';
 }
 
 /* Initialize game with test map */

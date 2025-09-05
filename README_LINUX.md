@@ -78,6 +78,18 @@ sudo apt-get update
 sudo apt-get install libx11-dev libxext-dev
 ```
 
+### CentOS/RHEL/Fedora
+```bash
+sudo yum install libX11-devel libXext-devel
+# or for newer versions:
+sudo dnf install libX11-devel libXext-devel
+```
+
+### Arch Linux
+```bash
+sudo pacman -S libx11 libxext
+```
+
 ### 按键不响应
 如果按键不响应，请确保：
 1. 程序窗口处于焦点状态
@@ -111,3 +123,33 @@ chmod +x cub3D
 - Linux: `mlx_key_hook` + X11事件
 - macOS: `mlx_hook` + 系统事件
 - 统一的回调函数接口
+
+## OS Detection
+The Makefile uses:
+```makefile
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Darwin)
+    # macOS settings
+    MLX_FLAGS = -framework OpenGL -framework AppKit
+else
+    # Linux settings
+    MLX_FLAGS = -lXext -lX11 -lm
+endif
+```
+
+## File Structure
+```
+library/
+├── minilibx_opengl_20191021/  # macOS version
+├── minilibx-linux/            # Linux version (auto-extracted)
+├── minilibx_macos_opengl.tgz  # macOS archive
+├── minilibx_macos_metal.tgz   # macOS Metal archive
+└── minilibx-linux.tgz         # Linux archive
+```
+
+## Notes
+- The project automatically handles OS detection
+- No manual configuration required
+- Both versions of minilibx are included
+- Clean compilation on both platforms

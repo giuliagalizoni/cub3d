@@ -51,12 +51,19 @@ static char	**push_to_arr(char **arr, int size, char *line)
 	char	**new_arr;
 	int		i;
 
+	if (is_equal(line, "\n"))
+	{
+		ft_printf("Error: empty line");
+		// TODO: cleanup free arr function
+		return (NULL);
+	}
 	new_arr = malloc(sizeof(char *) * (size + 2));
 	if (!new_arr)
 		return (NULL);
 	i = 0;
 	while (i < size)
 	{
+		new_arr[i] = arr[i];
 		new_arr[i] = arr[i];
 		i++;
 	}
@@ -97,6 +104,8 @@ void	parse_map(int fd, char *first_line, t_game *game)
 		free(line);
 		line = get_next_line(fd);
 	}
+	get_dimensions(game->map);
+	pad_map(game);
 	get_dimensions(game->map);
 	pad_map(game);
 }

@@ -5,18 +5,20 @@ CFLAGS		= -Wall -Wextra -Werror -g
 
 # Detect OS
 UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Linux)
-	# Linux configuration
-	MLX_DIR		= library/minilibx-linux
-	MLX_LIB		= $(MLX_DIR)/libmlx.a
-	MLX_FLAGS	= -lXext -lX11 -lm
-	INCLUDES	= -I./include -I./$(MLX_DIR)
+
+# OS-specific settings
+ifeq ($(UNAME_S),Darwin)
+    # macOS
+    MLX_DIR		= library/minilibx_opengl_20191021
+    MLX_LIB		= $(MLX_DIR)/libmlx.a
+    MLX_FLAGS	= -framework OpenGL -framework AppKit
+    INCLUDES	= -I./include -I./$(MLX_DIR)
 else
-	# macOS configuration
-	MLX_DIR		= library/minilibx_opengl_20191021
-	MLX_LIB		= $(MLX_DIR)/libmlx.a
-	MLX_FLAGS	= -framework OpenGL -framework AppKit
-	INCLUDES	= -I./include -I./$(MLX_DIR)
+    # Linux
+    MLX_DIR		= library/minilibx-linux
+    MLX_LIB		= $(MLX_DIR)/libmlx.a
+    MLX_FLAGS	= -lXext -lX11 -lm
+    INCLUDES	= -I./include -I./$(MLX_DIR)
 endif
 
 # Directories
@@ -48,31 +50,46 @@ SRCS		= $(SRC_DIR)/main.c \
 
 # Object files
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-
 # Libft
 LIBFT_DIR	= libft
 LIBFT_LIB	= $(LIBFT_DIR)/libft.a
 LIBFT_INC	= -I$(LIBFT_DIR)
 
 # Rules
-all: $(MLX_LIB) $(LIBFT_LIB) $(NAME)
+all: setup_mlx $(LIBFT_LIB) $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT_LIB)
-	$(CC) $(OBJS) -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft $(MLX_FLAGS) -lm -o $(NAME)
+	$(CC) $(OBJS) -L$(MLX_DIR) -lmlx $(MLX_FLAGS) -L$(LIBFT_DIR) -lft -lm -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDES) $(LIBFT_INC) -c $< -o $@
+	$(CC) $(CFLAGS) -I./include -I$(MLX_DIR) $(LIBFT_INC) -c $< -o $@
 
-$(MLX_LIB):
-	@make -C $(MLX_DIR)
+setup_mlx:
+ifeq ($(UNAME_S),Darwin)
+	@if [ ! -d "$(MLX_DIR)" ]; then \
+		echo "Setting up macOS minilibx..."; \
+		cd library && tar -xzf minilibx_macos_opengl.tgz; \
+	fi
+	@make -C $(MLX_DIR) 2>/dev/null || echo "minilibx already compiled"
+else
+	@if [ ! -d "$(MLX_DIR)" ]; then \
+		echo "Setting up Linux minilibx..."; \
+		cd library && tar -xzf minilibx-linux.tgz; \
+	fi
+	@make -C $(MLX_DIR) 2>/dev/null || echo "minilibx already compiled"
+endif
 
 $(LIBFT_LIB):
 	@make -C $(LIBFT_DIR)
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@make -C $(MLX_DIR) clean
+ifeq ($(UNAME_S),Darwin)
+	@make -C $(MLX_DIR) clean 2>/dev/null || true
+else
+	@make -C $(MLX_DIR) clean 2>/dev/null || true
+endif
 	@make -C $(LIBFT_DIR) clean
 
 fclean: clean
@@ -81,4 +98,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re setup_mlx
