@@ -52,25 +52,27 @@ typedef struct s_keys
 	int	right;
 }	t_keys;
 
+/* Error Codes Enum */
 typedef enum e_error
 {
-	ERR_USAGE,
-	ERR_MALLOC,
-	ERR_FILE_EXT,
-	ERR_FILE_OPEN,
-	ERR_DUPLICATE_ID,
-	ERR_INVALID_ID,
-	ERR_INVALID_RGB,
-	ERR_MISSING_CONFIG,
-	ERR_MISSING_MAP,
-	ERR_EMPTY_LINE_MAP,
-	ERR_INVALID_CHAR_MAP,
-	ERR_DUPLICATE_PLAYER,
-	ERR_MISSING_PLAYER,
-	ERR_MAP_NOT_CLOSED,
-	ERR_SYSTEM
+    ERR_USAGE,
+    ERR_MALLOC,
+    ERR_FILE_EXT,
+    ERR_FILE_OPEN,
+    ERR_DUPLICATE_ID,
+    ERR_INVALID_ID,
+    ERR_INVALID_RGB,
+    ERR_MISSING_CONFIG,
+	  ERR_MISSING_MAP,
+    ERR_EMPTY_LINE_MAP,
+    ERR_INVALID_CHAR_MAP,
+    ERR_DUPLICATE_PLAYER,
+    ERR_MISSING_PLAYER,
+    ERR_MAP_NOT_CLOSED,
+	  ERR_SYSTEM
 }	t_error;
 
+/* Player structure */
 typedef struct s_player
 {
 	double	x;
@@ -176,7 +178,9 @@ int		parse_config_line(char *line, t_game *game);
 void	parse_map(int fd, char *first_line, t_game *game);
 void	scan_map(t_map *map, t_game *game);
 void	validade_map(t_game *game);
-int		is_equal(char *str1, char *str2);
+
+/* Function prototypes - Window management */
+
 int		init_window(t_game *game);
 int		close_window(t_game *game);
 void	cleanup_game(t_game *game);
@@ -212,6 +216,7 @@ void	draw_wall_slice_textured(t_game *game, int x, double wall_height,
 int		is_wall(t_game *game, int x, int y);
 void	init_player(t_game *game, double x, double y, char direction);
 void	set_default_colors(t_game *game);
+
 int		load_texture(t_game *game, t_img *texture, char *path);
 int		load_all_textures(t_game *game);
 int		load_textures(t_game *game);
@@ -227,11 +232,17 @@ int		calculate_texture_y(t_img *texture, int y, int wall_start,
 			int wall_height);
 int		get_texture_pixel(t_img *texture, int x, int y);
 double	calculate_wall_x(t_game *game, double ray_angle, int wall_side);
+
+/* Function prototypes - Cleaning */
 void	free_arr(char **arr);
 void	cleanup_parsing(t_game *game);
 void	exhaust_gnl(int fd);
 void	ft_perror(t_error err_code, char *context);
 void	error_exit(t_error err_code, t_game *game, char *context);
+
+/* Utils */
 int		arr_size(char **arr);
+int		is_equal(char *str1, char *str2);
+char	*get_first_word(char *line);
 
 #endif

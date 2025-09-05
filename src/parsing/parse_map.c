@@ -2,11 +2,12 @@
 
 void	get_dimensions(t_map *map)
 {
-	char **arr = map->arr;
-	int	y;
-	int	x;
-	int	width;
+	char	**arr;
+	int		y;
+	int		x;
+	int		width;
 
+	arr = map->arr;
 	y = 0;
 	width = 0;
 	while (arr[y])
@@ -57,13 +58,14 @@ static char	**push_to_arr(char **arr, int size, char *line)
 	while (i < size)
 	{
 		new_arr[i] = arr[i];
+		new_arr[i] = arr[i];
 		i++;
 	}
 	new_arr[size] = ft_strtrim(line, "\n");
 	if (!new_arr[size])
 	{
 		free_arr(new_arr);
-		return NULL;
+		return (NULL);
 	}
 	new_arr[size + 1] = NULL;
 	if (arr)
@@ -96,6 +98,8 @@ void	parse_map(int fd, char *first_line, t_game *game)
 		free(line);
 		line = get_next_line(fd);
 	}
+	get_dimensions(game->map);
+	pad_map(game);
 	get_dimensions(game->map);
 	pad_map(game);
 }

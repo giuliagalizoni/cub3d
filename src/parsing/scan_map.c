@@ -1,10 +1,27 @@
 #include "../../include/cub3d.h"
 
-static int is_valid_char(char c)
+static int	is_valid_char(char c)
 {
 	return (c == '0' || c == '1' || c == ' ' || c == ' ' || c == 'N'
 		|| c == 'S' || c == 'W' || c == 'E');
 }
+
+void	populate_map(t_map *map, t_game *game, int x, int y)
+{
+	if (!is_valid_char(map->arr[y][x]))
+		error_exit(ERR_INVALID_CHAR_MAP, game, NULL);
+	if (map->arr[y][x] == 'N' || map->arr[y][x] == 'S'
+			|| map->arr[y][x] == 'W' || map->arr[y][x] == 'E')
+	{
+		if (map->player_dir)
+			error_exit(ERR_DUPLICATE_PLAYER, game, NULL);
+		map->player_dir = map->arr[y][x];
+		map->player_x = x;
+		map->player_y = y;
+		map->arr[y][x] = '0';
+	}
+}
+
 void	scan_map(t_map *map, t_game *game)
 {
 	int	y;
@@ -16,18 +33,7 @@ void	scan_map(t_map *map, t_game *game)
 		x = 0;
 		while (map->arr[y][x])
 		{
-			if (!is_valid_char(map->arr[y][x]))
-				error_exit(ERR_INVALID_CHAR_MAP, game, NULL);
-			if (map->arr[y][x] == 'N' || map->arr[y][x] == 'S'
-				|| map->arr[y][x] == 'W'|| map->arr[y][x] == 'E')
-			{
-				if (map->player_dir)
-					error_exit(ERR_DUPLICATE_PLAYER, game, NULL);
-				map->player_dir = map->arr[y][x];
-				map->player_x = x;
-				map->player_y = y;
-				map->arr[y][x] = '0';
-			}
+			populate_map(map, game, x, y);
 			x++;
 		}
 		y++;
