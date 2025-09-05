@@ -1,4 +1,55 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/05 06:10:00 by shutan            #+#    #+#             */
+/*   Updated: 2025/09/05 06:16:09 by shutan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/cub3d.h"
+
+
+static void	init_textures(t_game *game)
+{
+	game->textures = malloc(sizeof(t_textures));
+	if (!game->textures)
+		error_exit(ERR_MALLOC, game, "textures");
+	game->textures->no = NULL;
+	game->textures->so = NULL;
+	game->textures->we = NULL;
+	game->textures->ea = NULL;
+	game->textures->c = -1;
+	game->textures->f = -1;
+	game->textures->loaded = 0;
+}
+
+static void	init_map(t_game *game)
+{
+	game->map = malloc(sizeof(t_map));
+	if (!game->map)
+		error_exit(ERR_MALLOC, game, "map");
+	game->map->arr = NULL;
+	game->map->player_x = -1;
+	game->map->player_y = -1;
+	game->map->player_dir = '\0';
+	game->map->player_x = -1;
+	game->map->player_x = -1;
+	game->map->player_dir = '\0';
+}
+
+static void	init_keys(t_game *game)
+{
+	game->keys.w = 0;
+	game->keys.a = 0;
+	game->keys.s = 0;
+	game->keys.d = 0;
+	game->keys.left = 0;
+	game->keys.right = 0;
+}
 
 static void	init(t_game *game)
 {
@@ -7,49 +58,11 @@ static void	init(t_game *game)
 		error_exit(ERR_MALLOC, game, "player");
 	game->screen.img = NULL;
 	game->win = NULL;
-	game->textures = malloc(sizeof(t_textures));
-	if (!game->textures)
-		error_exit(ERR_MALLOC, game, "textures");
-	game->textures->NO = NULL;
-	game->textures->SO = NULL;
-	game->textures->WE = NULL;
-	game->textures->EA = NULL;
-	game->textures->C = -1;
-	game->textures->F = -1;
-	game->map = malloc(sizeof(t_map));
-	if (!game->map)
-		error_exit(ERR_MALLOC, game, "map");
-	game->map->arr = NULL;
-	game->map->player_x = -1;
-	game->map->player_x = -1;
-	game->map->player_dir = '\0';
-	game->map->player_x = -1;
-	game->map->player_x = -1;
-	game->map->player_dir = '\0';
+	init_textures(game);
+	init_map(game);
+	init_keys(game);
 }
 
-/* Initialize game with test map */
-void	init_test_game(t_game *game)
-{
-	static char	*test_map[] = {
-		"111111111",
-		"100000001",
-		"101010101",
-		"100000001",
-		"100N00001",
-		"100000001",
-		"101010101",
-		"100000001",
-		"111111111",
-		NULL
-	};
-
-	game->map->arr = test_map;
-	game->map->width = 9;
-	game->map->height = 9;
-	init_player(game, 3, 4, 'N');
-	// set_default_colors(game);
-}
 /* Main function */
 static void debug_prints(t_game game)
 {
@@ -83,13 +96,20 @@ int	main(int ac, char **av)
 	}
 	init(&game);
 	parser(av[1], &game);
-	init_player(&game, game.map->player_x, game.map->player_y, game.map->player_dir);
+	init_player(&game, game.map->player_x, game.map->player_y,
+		game.map->player_dir);
+
 	if (!init_window(&game))
 	{
 		cleanup_parsing(&game);
 		return (1);
 	}
 	debug_prints(game);
+	if (!setup_game(&game))
+  {
+		cleanup_parsing(&game);
+		return (1);
+	}
 	// conversion of rgb to mlx format -- decide where this fits better
 	game.textures->F = mlx_get_color_value(game.mlx, game.textures->F);
 	game.textures->C = mlx_get_color_value(game.mlx, game.textures->C);

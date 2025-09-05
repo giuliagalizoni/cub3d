@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wall_drawing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 06:48:28 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/22 12:07:08 by giuliagaliz      ###   ########.fr       */
+/*   Updated: 2025/09/05 05:43:27 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,54 @@ void	draw_wall_slice(t_game *game, int x, double wall_height)
 	}
 }
 
+static void	draw_texture_column(t_game *game, int x, t_texture_draw *draw_data)
+{
+	int		y;
+	int		tex_y;
+	int		color;
+
+	y = draw_data->start_y;
+	while (y <= draw_data->end_y)
+	{
+		tex_y = (int)draw_data->tex_pos;
+		if (tex_y < 0)
+			tex_y = 0;
+		else if (tex_y >= draw_data->texture->height)
+			tex_y = draw_data->texture->height - 1;
+		draw_data->tex_pos += draw_data->tex_step;
+		color = get_texture_pixel(draw_data->texture, draw_data->tex_x, tex_y);
+		put_pixel(&game->screen, x, y, color);
+		y++;
+	}
+}
+
+void	draw_wall_slice_textured(t_game *game, int x, double wall_height,
+		t_ray_data *ray_data)
+{
+	t_texture_draw	draw_data;
+
+	draw_data.start_y = (WIN_HEIGHT - wall_height) / 2;
+	draw_data.end_y = (WIN_HEIGHT + wall_height) / 2;
+	if (draw_data.start_y < 0)
+		draw_data.start_y = 0;
+	if (draw_data.end_y >= WIN_HEIGHT)
+		draw_data.end_y = WIN_HEIGHT - 1;
+	draw_data.texture = get_wall_texture_by_direction(game, ray_data->wall_side,
+			ray_data->ray_dir_x, ray_data->ray_dir_y);
+	if (!draw_data.texture || !draw_data.texture->img)
+	{
+		draw_wall_slice(game, x, wall_height);
+		return ;
+	}
+	draw_data.tex_x = calculate_texture_x_with_flip(draw_data.texture,
+			ray_data->wall_x, ray_data->wall_side, ray_data->ray_dir_x,
+			ray_data->ray_dir_y);
+	draw_data.tex_step = (double)draw_data.texture->height / wall_height;
+	draw_data.tex_pos = (draw_data.start_y - WIN_HEIGHT / 2.0 + wall_height
+			/ 2.0) * draw_data.tex_step;
+	draw_texture_column(game, x, &draw_data);
+}
+
 /* Check if coordinate is a wall */
 int	is_wall(t_game *game, int x, int y)
 {
@@ -47,26 +95,9 @@ int	is_wall(t_game *game, int x, int y)
 	return (0);
 }
 
-/* Initialize player position and direction */
-void	init_player(t_game *game, double x, double y, char direction)
-{
-	game->player->x = x + 0.5;
-	game->player->y = y + 0.5;
-	if (direction == 'N')
-		game->player->angle = 3 * PI / 2;
-	else if (direction == 'S')
-		game->player->angle = PI / 2;
-	else if (direction == 'E')
-		game->player->angle = 0;
-	else if (direction == 'W')
-		game->player->angle = PI;
-	game->player->dx = cos(game->player->angle);
-	game->player->dy = sin(game->player->angle);
-}
-
 /* Set default floor and ceiling colors */
 void	set_default_colors(t_game *game)
 {
-	game->floor_color = 0x654321;
+	game->floor_color = 0x8B4513;
 	game->ceiling_color = 0x87CEEB;
 }

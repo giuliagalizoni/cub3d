@@ -3,19 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:23:08 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/22 15:47:49 by giuliagaliz      ###   ########.fr       */
+/*   Updated: 2025/09/04 18:58:11 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
+/* Initialize rendering system */
+int	init_rendering(t_game *game)
+{
+	if (!init_screen_image(game))
+	{
+		ft_printf("Error: Failed to initialize screen image\n");
+		return (0);
+	}
+	if (!load_textures(game))
+	{
+		ft_printf("Error: Failed to load textures\n");
+		return (0);
+	}
+	return (1);
+}
+
 /* Main rendering function called each frame */
 int	render_frame(t_game *game)
 {
-	clear_image(&game->screen, game->ceiling_color);
+	update_movement(game);
 	draw_floor_ceiling(game);
 	cast_rays(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->screen.img, 0, 0);
@@ -66,7 +82,7 @@ void	draw_floor_ceiling(t_game *game)
 		x = 0;
 		while (x < WIN_WIDTH)
 		{
-			put_pixel(&game->screen, x, y, game->textures->C);
+			put_pixel(&game->screen, x, y, game->ceiling_color);
 			x++;
 		}
 		y++;
@@ -76,7 +92,7 @@ void	draw_floor_ceiling(t_game *game)
 		x = 0;
 		while (x < WIN_WIDTH)
 		{
-			put_pixel(&game->screen, x, y, game->textures->F);
+			put_pixel(&game->screen, x, y, game->floor_color);
 			x++;
 		}
 		y++;

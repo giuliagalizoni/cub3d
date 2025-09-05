@@ -51,12 +51,6 @@ static char	**push_to_arr(char **arr, int size, char *line)
 	char	**new_arr;
 	int		i;
 
-	if (is_equal(line, "\n"))
-	{
-		ft_printf("Error: empty line");
-		// TODO: cleanup free arr function
-		return (NULL);
-	}
 	new_arr = malloc(sizeof(char *) * (size + 2));
 	if (!new_arr)
 		return (NULL);

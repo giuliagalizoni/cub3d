@@ -2,9 +2,9 @@
 
 static int	is_config_all_set(t_game *game)
 {
-	if (game->textures->NO && game->textures->SO
-		&& game->textures->WE && game->textures->EA
-		&& game->textures->F != -1 && game->textures->C != -1)
+	if (game->textures->no && game->textures->so
+		&& game->textures->we && game->textures->ea
+		&& game->textures->f != -1 && game->textures->c != -1)
 		return (1);
 	return (0);
 }
@@ -15,7 +15,7 @@ static char	*read_config(int fd, t_game *game)
 	int		result;
 
 	line = get_next_line(fd);
-	while (line)
+	while(line)
 	{
 		result = parse_config_line(line, game);
 		if (result == -1)

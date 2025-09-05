@@ -22,6 +22,7 @@ char	**copy_arr(char **arr, int size, t_game *game)
 	return (new_arr);
 }
 
+
 int	flood_fill(char **map_copy, int x, int y, t_map *map)
 {
 	if (y < 0 || y >= map->height || x < 0 || x >= map->width)
@@ -50,8 +51,7 @@ void	validade_map(t_game *game)
 	map = game->map;
 	scan_map(map, game);
 	map_copy = copy_arr(map->arr, map->height, game);
-	if (!flood_fill(map_copy, map->player_x,
-			map->player_y, map))
+	if (!flood_fill(map_copy, map->player_x, map->player_y, map))
 	{
 		free_arr(map_copy);
 		error_exit(ERR_MAP_NOT_CLOSED, game, NULL);

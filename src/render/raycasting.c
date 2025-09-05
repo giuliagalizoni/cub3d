@@ -3,72 +3,95 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:39:11 by shutan            #+#    #+#             */
-/*   Updated: 2025/08/22 12:04:04 by giuliagaliz      ###   ########.fr       */
+/*   Updated: 2025/09/05 05:38:03 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-/* Cast rays for each column of the screen */
+static void	process_single_ray(t_game *game, int x, t_ray_data *ray_data)
+{
+	double	camera_x;
+	double	wall_dist;
+	double	wall_height;
+
+	camera_x = 2 * x / (double)WIN_WIDTH - 1;
+	ray_data->ray_dir_x = game->player->dx + game->player->plane_x * camera_x;
+	ray_data->ray_dir_y = game->player->dy + game->player->plane_y * camera_x;
+	wall_dist = cast_ray_dda_standard(game, ray_data);
+	wall_height = (int)(WIN_HEIGHT / wall_dist);
+	draw_wall_slice_textured(game, x, wall_height, ray_data);
+}
+
 void	cast_rays(t_game *game)
 {
-	int		x;
-	double	ray_angle;
-	double	distance;
-	double	wall_height;
+	int			x;
+	t_ray_data	ray_data;
 
 	x = 0;
 	while (x < WIN_WIDTH)
 	{
-		ray_angle = calculate_ray_angle(game, x);
-		distance = cast_single_ray(game, ray_angle);
-		wall_height = calculate_wall_height(distance);
-		draw_wall_slice(game, x, wall_height);
+		process_single_ray(game, x, &ray_data);
 		x++;
 	}
 }
 
-/* Calculate the angle for a specific ray */
-double	calculate_ray_angle(t_game *game, int x)
+static void	init_dda_vars(t_game *game, double ray_dir_x, double ray_dir_y,
+		t_dda_vars *vars)
 {
-	double	camera_x;
-	double	ray_angle;
-
-	camera_x = 2 * x / (double)WIN_WIDTH - 1;
-	ray_angle = game->player->angle + atan(camera_x * tan(FOV * DR / 2));
-	return (ray_angle);
+	vars->map_x = (int)game->player->x;
+	vars->map_y = (int)game->player->y;
+	vars->delta_dist_x = fabs(1 / ray_dir_x);
+	vars->delta_dist_y = fabs(1 / ray_dir_y);
+	vars->hit = 0;
 }
 
-/* Cast a single ray and return distance to wall */
-double	cast_single_ray(t_game *game, double ray_angle)
+static void	set_step_and_side(t_game *game, double ray_dir_x, double ray_dir_y,
+		t_dda_vars *vars)
 {
-	double	ray_x;
-	double	ray_y;
-	double	dx;
-	double	dy;
-	double	distance;
-
-	ray_x = game->player->x;
-	ray_y = game->player->y;
-	dx = cos(ray_angle) * 0.01;
-	dy = sin(ray_angle) * 0.01;
-	distance = 0;
-	while (!is_wall(game, (int)ray_x, (int)ray_y))
+	if (ray_dir_x < 0)
 	{
-		ray_x += dx;
-		ray_y += dy;
-		distance += 0.01;
+		vars->step_x = -1;
+		vars->side_dist_x = (game->player->x - vars->map_x)
+			* vars->delta_dist_x;
 	}
-	return (distance * cos(ray_angle - game->player->angle));
+	else
+	{
+		vars->step_x = 1;
+		vars->side_dist_x = (vars->map_x + 1.0 - game->player->x)
+			* vars->delta_dist_x;
+	}
+	if (ray_dir_y < 0)
+	{
+		vars->step_y = -1;
+		vars->side_dist_y = (game->player->y - vars->map_y)
+			* vars->delta_dist_y;
+	}
+	else
+	{
+		vars->step_y = 1;
+		vars->side_dist_y = (vars->map_y + 1.0 - game->player->y)
+			* vars->delta_dist_y;
+	}
 }
 
-/* Calculate wall height based on distance */
-double	calculate_wall_height(double distance)
+double	cast_ray_dda_standard(t_game *game, t_ray_data *ray_data)
 {
-	if (distance == 0)
-		return (WIN_HEIGHT);
-	return (WIN_HEIGHT / distance);
+	t_dda_vars	vars;
+	double		perp_wall_dist;
+
+	init_dda_vars(game, ray_data->ray_dir_x, ray_data->ray_dir_y, &vars);
+	set_step_and_side(game, ray_data->ray_dir_x, ray_data->ray_dir_y, &vars);
+	perp_wall_dist = perform_dda_loop(game, &vars, &ray_data->wall_side);
+	if (ray_data->wall_side == 0)
+		ray_data->wall_x = game->player->y + perp_wall_dist
+			* ray_data->ray_dir_y;
+	else
+		ray_data->wall_x = game->player->x + perp_wall_dist
+			* ray_data->ray_dir_x;
+	ray_data->wall_x -= floor(ray_data->wall_x);
+	return (perp_wall_dist);
 }

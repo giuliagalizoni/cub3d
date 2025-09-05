@@ -28,6 +28,7 @@ PARSER_DIR	= $(SRC_DIR)/parsing
 RENDER_DIR	= $(SRC_DIR)/render
 INPUT_DIR	= $(SRC_DIR)/input
 UTILS_DIR	= $(SRC_DIR)/utils
+TEXTURE_DIR	= $(SRC_DIR)/textures
 
 # Source files
 SRCS		= $(SRC_DIR)/main.c \
@@ -37,6 +38,9 @@ SRCS		= $(SRC_DIR)/main.c \
 		  $(RENDER_DIR)/wall_drawing.c \
 		  $(INPUT_DIR)/input.c \
 		  $(INPUT_DIR)/movement.c \
+		  $(TEXTURE_DIR)/texture_loader.c \
+		  $(TEXTURE_DIR)/texture_manager.c \
+		  $(TEXTURE_DIR)/texture_utils.c \
 		  $(PARSER_DIR)/parser.c \
 		  $(PARSER_DIR)/read_cub.c \
 		  $(PARSER_DIR)/parse_map.c \

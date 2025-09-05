@@ -1,10 +1,10 @@
 F 0,   160,240
 
-		NO ./north.xpm
-SO ./south.xpm
+NO ./assets/north.xpm
+SO ./assets/south.xpm
 C 100,200, 50
-WE ./west.xpm
-EA ./east.xpm
+WE ./assets/west.xpm
+EA ./assets/east.xpm
 
 
 
