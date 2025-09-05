@@ -2,10 +2,10 @@
 
 static int	parse_rgb(char *rgb_str, t_game *game)
 {
-	int	r;
-	int	g;
-	int	b;
-	char **rgb_arr;
+	int		r;
+	int		g;
+	int		b;
+	char	**rgb_arr;
 
 	rgb_arr = ft_split(rgb_str, ',');
 	if (!rgb_arr || arr_size(rgb_arr) != 3)
@@ -35,22 +35,6 @@ static void	set_texture(t_game *game, char **field, char *path, char *id)
 	if (*field)
 		error_exit(ERR_DUPLICATE_ID, game, id);
 	*field = ft_strdup(path);
-}
-
-static char	*get_first_word(char *line)
-{
-	int	i;
-	int	start;
-	int	end;
-
-	i = 0;
-	while (line[i] == ' ' || line[i] == '\t')
-		i++;
-	start = i;
-	while (line[i] && line[i] != ' ' && line[i] != '\t')
-		i++;
-	end = i;
-	return (ft_substr(line, start, end - start));
 }
 
 static int	set_config_value(t_game *game, char *id, char *value)

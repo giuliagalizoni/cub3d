@@ -22,22 +22,23 @@ char	**copy_arr(char **arr, int size, t_game *game)
 	return (new_arr);
 }
 
-int	flood_fill(char **map, int x, int y, int height, int width)
+
+int	flood_fill(char **map_copy, int x, int y, t_map *map)
 {
-	if (y < 0 || y >= height || x < 0 || x >= width)
+	if (y < 0 || y >= map->height || x < 0 || x >= map->width)
 		return (0);
-	if (map[y][x] == ' ')
+	if (map_copy[y][x] == ' ')
 		return (0);
-	if (map[y][x] == '1' || map[y][x] == 'V')
+	if (map_copy[y][x] == '1' || map_copy[y][x] == 'V')
 		return (1);
-	map[y][x] = 'V';
-	if (!flood_fill(map, x + 1, y, height, width))
+	map_copy[y][x] = 'V';
+	if (!flood_fill(map_copy, x + 1, y, map))
 		return (0);
-	if (!flood_fill(map, x - 1, y, height, width))
+	if (!flood_fill(map_copy, x - 1, y, map))
 		return (0);
-	if (!flood_fill(map, x, y + 1, height, width))
+	if (!flood_fill(map_copy, x, y + 1, map))
 		return (0);
-	if (!flood_fill(map, x, y - 1, height, width))
+	if (!flood_fill(map_copy, x, y - 1, map))
 		return (0);
 	return (1);
 }
@@ -50,8 +51,7 @@ void	validade_map(t_game *game)
 	map = game->map;
 	scan_map(map, game);
 	map_copy = copy_arr(map->arr, map->height, game);
-	if (!flood_fill(map_copy, map->player_x,
-			map->player_y, map->height, map->width))
+	if (!flood_fill(map_copy, map->player_x, map->player_y, map))
 	{
 		free_arr(map_copy);
 		error_exit(ERR_MAP_NOT_CLOSED, game, NULL);
