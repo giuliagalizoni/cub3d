@@ -49,6 +49,26 @@
 # define PI 3.14159265359
 # define DR 0.0174533
 
+/* Error Codes Enum */
+typedef enum e_error
+{
+    ERR_USAGE,
+    ERR_MALLOC,
+    ERR_FILE_EXT,
+    ERR_FILE_OPEN,
+    ERR_DUPLICATE_ID,
+    ERR_INVALID_ID,
+    ERR_INVALID_RGB,
+    ERR_MISSING_CONFIG,
+	ERR_MISSING_MAP,
+    ERR_EMPTY_LINE_MAP,
+    ERR_INVALID_CHAR_MAP,
+    ERR_DUPLICATE_PLAYER,
+    ERR_MISSING_PLAYER,
+    ERR_MAP_NOT_CLOSED,
+	ERR_SYSTEM
+}	t_error;
+
 /* Player structure */
 typedef struct s_player
 {
@@ -84,9 +104,11 @@ typedef struct s_textures {
 
 typedef struct s_map {
 		char **arr;
-		int    width;
-		int    height;
-		//...
+		int	width;
+		int	height;
+		int	player_x;
+		int	player_y;
+		char	player_dir;
 } t_map;
 
 /* Game data structure */
@@ -106,7 +128,10 @@ typedef struct s_game
 /*Function prototypes - Parsing*/
 void	parser(char *path, t_game *game);
 void	read_cub(char *path, t_game *game);
+int		parse_config_line(char *line, t_game *game);
 void	parse_map(int fd, char *first_line, t_game *game);
+void	scan_map(t_map *map, t_game *game);
+void	validade_map(t_game *game);
 
 /* Function prototypes - Window management */
 int		init_window(t_game *game);
@@ -144,5 +169,17 @@ int		is_wall(t_game *game, int x, int y);
 /* Function prototypes - Game initialization */
 void	init_player(t_game *game, double x, double y, char direction);
 void	set_default_colors(t_game *game);
+
+/* Function prototypes - Cleaning */
+void	free_arr(char **arr);
+void	cleanup_parsing(t_game *game);
+void	exhaust_gnl(int fd);
+void	ft_perror(t_error err_code, char *context);
+void	error_exit(t_error err_code, t_game *game, char *context);
+
+/* Utils */
+int		arr_size(char **arr);
+int		is_equal(char *str1, char *str2);
+char	*get_first_word(char *line);
 
 #endif
