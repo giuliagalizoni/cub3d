@@ -1,9 +1,9 @@
-NO ./assets/north.xpm
-SO ./assets/south.xpm
-WE ./assets/west.xpm
-EA ./assets/east.xpm
-F 220,100,0
-C 225,30,0
+NO ./assets/tile1.xpm
+SO ./assets/tile2.xpm
+WE ./assets/tile3.xpm
+EA ./assets/tile4.xpm
+F 50,200,10
+C 22,30,153
 
 111111111111
 100000000001
