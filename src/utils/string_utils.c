@@ -8,3 +8,19 @@ int	is_equal(char *str1, char *str2)
 		return (1);
 	return (0);
 }
+
+char	*get_first_word(char *line)
+{
+	int	i;
+	int	start;
+	int	end;
+
+	i = 0;
+	while (line[i] == ' ' || line[i] == '\t')
+		i++;
+	start = i;
+	while (line[i] && line[i] != ' ' && line[i] != '\t')
+		i++;
+	end = i;
+	return (ft_substr(line, start, end - start));
+}

@@ -2,11 +2,12 @@
 
 void	get_dimensions(t_map *map)
 {
-	char	**arr = map->arr;
+	char	**arr;
 	int		y;
 	int		x;
 	int		width;
 
+	arr = map->arr;
 	y = 0;
 	width = 0;
 	while (arr[y])

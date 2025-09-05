@@ -180,5 +180,6 @@ void	error_exit(t_error err_code, t_game *game, char *context);
 /* Utils */
 int		arr_size(char **arr);
 int		is_equal(char *str1, char *str2);
+char	*get_first_word(char *line);
 
 #endif
