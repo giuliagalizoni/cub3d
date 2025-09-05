@@ -42,14 +42,14 @@ void	cleanup_parsing(t_game *game)
 	}
 	if (game->textures)
 	{
-		if (game->textures->NO)
-			free(game->textures->NO);
-		if (game->textures->SO)
-			free(game->textures->SO);
-		if (game->textures->WE)
-			free(game->textures->WE);
-		if (game->textures->EA)
-			free(game->textures->EA);
+		if (game->textures->no)
+			free(game->textures->no);
+		if (game->textures->so)
+			free(game->textures->so);
+		if (game->textures->we)
+			free(game->textures->we);
+		if (game->textures->ea)
+			free(game->textures->ea);
 		free(game->textures);
 	}
 	if (game->player)

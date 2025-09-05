@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:38:59 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/04 18:43:04 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/05 06:01:03 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,54 +53,40 @@ void	rotate_right(t_game *game)
 	game->player->angle += ROTATION_SPEED;
 	if (game->player->angle >= 2 * PI)
 		game->player->angle -= 2 * PI;
-	// Rotate direction vector
-	game->player->dx = old_dx * cos(ROTATION_SPEED) - game->player->dy * sin(ROTATION_SPEED);
-	game->player->dy = old_dx * sin(ROTATION_SPEED) + game->player->dy * cos(ROTATION_SPEED);
-	// Rotate camera plane
-	game->player->plane_x = old_plane_x * cos(ROTATION_SPEED) - game->player->plane_y * sin(ROTATION_SPEED);
-	game->player->plane_y = old_plane_x * sin(ROTATION_SPEED) + game->player->plane_y * cos(ROTATION_SPEED);
+	game->player->dx = old_dx * cos(ROTATION_SPEED) - game->player->dy
+		* sin(ROTATION_SPEED);
+	game->player->dy = old_dx * sin(ROTATION_SPEED) + game->player->dy
+		* cos(ROTATION_SPEED);
+	game->player->plane_x = old_plane_x * cos(ROTATION_SPEED)
+		- game->player->plane_y * sin(ROTATION_SPEED);
+	game->player->plane_y = old_plane_x * sin(ROTATION_SPEED)
+		+ game->player->plane_y * cos(ROTATION_SPEED);
 }
 
-/* Check if position is valid (not a wall) */
-int	is_valid_position(t_game *game, double x, double y)
+void	move_forward(t_game *game)
 {
-	int	map_x;
-	int	map_y;
+	double	new_x;
+	double	new_y;
 
-	map_x = (int)x;
-	map_y = (int)y;
-	if (map_x < 0 || map_x >= game->map->width)
-		return (0);
-	if (map_y < 0 || map_y >= game->map->height)
-		return (0);
-	if (game->map->arr[map_y][map_x] == '1')
-		return (0);
-	return (1);
+	new_x = game->player->x + game->player->dx * MOVE_SPEED;
+	new_y = game->player->y + game->player->dy * MOVE_SPEED;
+	if (!check_collision(game, new_x, new_y))
+	{
+		game->player->x = new_x;
+		game->player->y = new_y;
+	}
 }
 
-/* Check collision with better precision */
-int	check_collision(t_game *game, double x, double y)
+void	move_backward(t_game *game)
 {
-	double	radius;
-	int		check_x;
-	int		check_y;
+	double	new_x;
+	double	new_y;
 
-	radius = 0.2;
-	check_x = (int)(x - radius);
-	check_y = (int)(y - radius);
-	if (!is_valid_position(game, check_x, check_y))
-		return (1);
-	check_x = (int)(x + radius);
-	check_y = (int)(y - radius);
-	if (!is_valid_position(game, check_x, check_y))
-		return (1);
-	check_x = (int)(x - radius);
-	check_y = (int)(y + radius);
-	if (!is_valid_position(game, check_x, check_y))
-		return (1);
-	check_x = (int)(x + radius);
-	check_y = (int)(y + radius);
-	if (!is_valid_position(game, check_x, check_y))
-		return (1);
-	return (0);
+	new_x = game->player->x - game->player->dx * MOVE_SPEED;
+	new_y = game->player->y - game->player->dy * MOVE_SPEED;
+	if (!check_collision(game, new_x, new_y))
+	{
+		game->player->x = new_x;
+		game->player->y = new_y;
+	}
 }

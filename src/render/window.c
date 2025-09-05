@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:22:55 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/04 16:13:56 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/05 05:45:18 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,11 @@ int	init_screen_image(t_game *game)
 	return (1);
 }
 
-/* Set up event hooks */
 void	setup_hooks(t_game *game)
 {
-#ifdef __linux__
-	/* Linux: Use mlx_hook for key events */
-	mlx_hook(game->win, 2, 1L << 0, handle_keypress, game); /* KeyPress */
-	mlx_hook(game->win, 3, 1L << 1, handle_keyrelease, game); /* KeyRelease */
-	mlx_hook(game->win, 17, 0, close_window, game); /* ClientMessage for close */
-#else
-	/* macOS: Use mlx_hook for key events */
-	mlx_hook(game->win, 2, 1L << 0, handle_keypress, game); /* KeyPress */
-	mlx_hook(game->win, 3, 1L << 1, handle_keyrelease, game); /* KeyRelease */
+	mlx_hook(game->win, 2, 1L << 0, handle_keypress, game);
+	mlx_hook(game->win, 3, 1L << 1, handle_keyrelease, game);
 	mlx_hook(game->win, RED_CROSS, 0, close_window, game);
-#endif
 	mlx_loop_hook(game->mlx, render_frame, game);
 }
 
@@ -60,15 +51,4 @@ int	close_window(t_game *game)
 	cleanup_game(game);
 	exit(0);
 	return (0);
-}
-
-/* Clean up all allocated resources */
-void	cleanup_game(t_game *game)
-{
-	if (game->textures && game->textures->loaded)
-		free_textures(game);
-	if (game->screen.img)
-		mlx_destroy_image(game->mlx, game->screen.img);
-	if (game->win)
-		mlx_destroy_window(game->mlx, game->win);
 }

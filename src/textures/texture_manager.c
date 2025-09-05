@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 02:00:00 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/04 19:01:08 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/05 06:07:51 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,68 +23,47 @@ t_img	*get_wall_texture(t_game *game, int wall_side)
 }
 
 /* Get texture based on wall side and ray direction with improved logic */
-t_img	*get_wall_texture_advanced(t_game *game, int wall_side, double ray_angle)
+t_img	*get_wall_texture_advanced(t_game *game, int wall_side,
+			double ray_angle)
 {
 	double	ray_dir_x;
 	double	ray_dir_y;
 
 	ray_dir_x = cos(ray_angle);
 	ray_dir_y = sin(ray_angle);
-
-	// wall_side: 0 = East/West wall (vertical), 1 = North/South wall (horizontal)
-	// 根据ray的方向确定wall的实际方向，然后选择对应的texture
-	if (wall_side == 0) // East/West wall (vertical)
+	if (wall_side == 0)
 	{
 		if (ray_dir_x > 0)
-			return (&game->textures->imgs[3]); // East texture (ray going east, hitting east wall)
+			return (&game->textures->imgs[3]);
 		else
-			return (&game->textures->imgs[2]); // West texture (ray going west, hitting west wall)
+			return (&game->textures->imgs[2]);
 	}
-	else // North/South wall (horizontal)
+	else
 	{
 		if (ray_dir_y > 0)
-			return (&game->textures->imgs[0]); // North texture (ray going north, hitting north wall)
+			return (&game->textures->imgs[0]);
 		else
-			return (&game->textures->imgs[1]); // South texture (ray going south, hitting south wall)
+			return (&game->textures->imgs[1]);
 	}
-}
-
-/* Get texture based on wall type and direction */
-t_img	*get_wall_texture_by_type(t_game *game, char wall_type, int wall_side, double ray_angle)
-{
-	t_img	*base_texture;
-
-	base_texture = get_wall_texture_advanced(game, wall_side, ray_angle);
-	if (wall_type == '1')
-		return (base_texture);
-	else if (wall_type == '2')
-		return (&game->textures->imgs[0]);
-	else if (wall_type == '3')
-		return (&game->textures->imgs[1]);
-	else if (wall_type == '4')
-		return (&game->textures->imgs[2]);
-	else
-		return (base_texture);
 }
 
 /* Get texture based on wall side and ray direction using standard method */
-t_img	*get_wall_texture_by_direction(t_game *game, int wall_side, double ray_dir_x, double ray_dir_y)
+t_img	*get_wall_texture_by_direction(t_game *game, int wall_side,
+			double ray_dir_x, double ray_dir_y)
 {
-	// wall_side: 0 = East/West wall (vertical), 1 = North/South wall (horizontal)
-	// Texture mapping: imgs[0]=NO, imgs[1]=SO, imgs[2]=WE, imgs[3]=EA
-	if (wall_side == 0) // East/West wall (vertical)
+	if (wall_side == 0)
 	{
 		if (ray_dir_x < 0)
-			return (&game->textures->imgs[2]); // West texture (WE)
+			return (&game->textures->imgs[2]);
 		else
-			return (&game->textures->imgs[3]); // East texture (EA)
+			return (&game->textures->imgs[3]);
 	}
-	else // North/South wall (horizontal)
+	else
 	{
 		if (ray_dir_y > 0)
-			return (&game->textures->imgs[1]); // South texture (SO)
+			return (&game->textures->imgs[1]);
 		else
-			return (&game->textures->imgs[0]); // North texture (NO)
+			return (&game->textures->imgs[0]);
 	}
 }
 
@@ -100,53 +79,3 @@ int	calculate_texture_x(t_img *texture, double wall_x)
 		tex_x = texture->width - 1;
 	return (tex_x);
 }
-
-/* Calculate texture X coordinate with direction flip */
-int	calculate_texture_x_with_flip(t_img *texture, double wall_x, int wall_side, double ray_dir_x, double ray_dir_y)
-{
-	int	tex_x;
-
-	tex_x = (int)(wall_x * (double)texture->width);
-	// Apply texture flip based on ray direction
-	// For vertical walls (wall_side == 0): flip when ray goes west (ray_dir_x < 0)
-	// For horizontal walls (wall_side == 1): flip when ray goes north (ray_dir_y < 0)
-	if ((wall_side == 0 && ray_dir_x < 0) || (wall_side == 1 && ray_dir_y < 0))
-		tex_x = texture->width - tex_x - 1;
-	if (tex_x < 0)
-		tex_x = 0;
-	else if (tex_x >= texture->width)
-		tex_x = texture->width - 1;
-	return (tex_x);
-}
-
-/* Calculate texture Y coordinate */
-int	calculate_texture_y(t_img *texture, int y, int wall_start, int wall_height)
-{
-	int	tex_y;
-	int	relative_y;
-
-	relative_y = y - wall_start;
-	if (wall_height <= 0)
-		return (0);
-	tex_y = (relative_y * texture->height) / wall_height;
-	if (tex_y < 0)
-		tex_y = 0;
-	else if (tex_y >= texture->height)
-		tex_y = texture->height - 1;
-	return (tex_y);
-}
-
-/* Get pixel color from texture at given coordinates */
-int	get_texture_pixel(t_img *texture, int x, int y)
-{
-	char	*dst;
-	int		color;
-
-	if (x < 0 || x >= texture->width || y < 0 || y >= texture->height)
-		return (0);
-	dst = texture->addr + (y * texture->line_length + x
-			* (texture->bits_per_pixel / 8));
-	color = *(unsigned int *)dst;
-	return (color);
-}
-

@@ -56,17 +56,17 @@ static char	*get_first_word(char *line)
 static int	set_config_value(t_game *game, char *id, char *value)
 {
 	if (is_equal(id, "NO"))
-		set_texture(game, &game->textures->NO, value, id);
+		set_texture(game, &game->textures->no, value, id);
 	else if (is_equal(id, "SO"))
-		set_texture(game, &game->textures->SO, value, id);
+		set_texture(game, &game->textures->so, value, id);
 	else if (is_equal(id, "WE"))
-		set_texture(game, &game->textures->WE, value, id);
+		set_texture(game, &game->textures->we, value, id);
 	else if (is_equal(id, "EA"))
-		set_texture(game, &game->textures->EA, value, id);
+		set_texture(game, &game->textures->ea, value, id);
 	else if (is_equal(id, "F"))
-		set_rgb(game, &game->textures->F, value, id);
+		set_rgb(game, &game->textures->f, value, id);
 	else if (is_equal(id, "C"))
-		set_rgb(game, &game->textures->C, value, id);
+		set_rgb(game, &game->textures->c, value, id);
 	else
 		return (-1);
 	return (1);

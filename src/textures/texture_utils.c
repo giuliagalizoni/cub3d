@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   texture_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/21 18:39:11 by shutan            #+#    #+#             */
+/*   Updated: 2025/09/05 05:50:43 by shutan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3d.h"
 
 int	determine_wall_side(t_game *game, double ray_angle, int map_x, int map_y)
@@ -11,61 +23,60 @@ int	determine_wall_side(t_game *game, double ray_angle, int map_x, int map_y)
 	(void)map_y;
 	ray_dir_x = cos(ray_angle);
 	ray_dir_y = sin(ray_angle);
-	
-	// Determine wall side based on ray direction
-	// This is a simplified version - the actual side should be determined by DDA
 	if (fabs(ray_dir_x) > fabs(ray_dir_y))
 	{
-		// Vertical wall (East/West)
 		if (ray_dir_x > 0)
-			side = 3; // East
+			side = 3;
 		else
-			side = 2; // West
+			side = 2;
 	}
 	else
 	{
-		// Horizontal wall (North/South)
 		if (ray_dir_y > 0)
-			side = 1; // South
+			side = 1;
 		else
-			side = 0; // North
+			side = 0;
 	}
 	return (side);
 }
 
+static double	calculate_perp_dist(t_game *game, int wall_side,
+		t_wall_calc *calc)
+{
+	double	perp_wall_dist;
+
+	if (wall_side == 0)
+		perp_wall_dist = (calc->map_x - game->player->x + (1 - calc->step_x)
+				/ 2.0) / calc->ray_dir_x;
+	else
+		perp_wall_dist = (calc->map_y - game->player->y + (1 - calc->step_y)
+				/ 2.0) / calc->ray_dir_y;
+	return (perp_wall_dist);
+}
+
 double	calculate_wall_x(t_game *game, double ray_angle, int wall_side)
 {
-	double	wall_x;
-	double	ray_dir_x;
-	double	ray_dir_y;
-	double	perp_wall_dist;
-	int		map_x;
-	int		map_y;
-	int		step_x;
-	int		step_y;
+	double		wall_x;
+	double		perp_wall_dist;
+	t_wall_calc	calc;
 
-	ray_dir_x = cos(ray_angle);
-	ray_dir_y = sin(ray_angle);
-	map_x = (int)game->player->x;
-	map_y = (int)game->player->y;
-	if (ray_dir_x < 0)
-		step_x = -1;
+	calc.ray_dir_x = cos(ray_angle);
+	calc.ray_dir_y = sin(ray_angle);
+	calc.map_x = (int)game->player->x;
+	calc.map_y = (int)game->player->y;
+	if (calc.ray_dir_x < 0)
+		calc.step_x = -1;
 	else
-		step_x = 1;
-	if (ray_dir_y < 0)
-		step_y = -1;
+		calc.step_x = 1;
+	if (calc.ray_dir_y < 0)
+		calc.step_y = -1;
 	else
-		step_y = 1;
+		calc.step_y = 1;
+	perp_wall_dist = calculate_perp_dist(game, wall_side, &calc);
 	if (wall_side == 0)
-	{
-		perp_wall_dist = (map_x - game->player->x + (1 - step_x) / 2.0) / ray_dir_x;
-		wall_x = game->player->y + perp_wall_dist * ray_dir_y;
-	}
+		wall_x = game->player->y + perp_wall_dist * calc.ray_dir_y;
 	else
-	{
-		perp_wall_dist = (map_y - game->player->y + (1 - step_y) / 2.0) / ray_dir_y;
-		wall_x = game->player->x + perp_wall_dist * ray_dir_x;
-	}
+		wall_x = game->player->x + perp_wall_dist * calc.ray_dir_x;
 	wall_x -= floor(wall_x);
 	return (wall_x);
 }
