@@ -33,7 +33,7 @@ void	read_cub(char *path, t_game *game)
 
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-		error_exit(ERR_FILE_OPEN, game, path);
+		error_exit(ERR_SYSTEM, game, path);
 	map_start = read_config(fd, game);
 	if (!is_config_all_set(game))
 	{

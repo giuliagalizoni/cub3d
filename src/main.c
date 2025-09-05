@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 06:10:00 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/05 06:16:09 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/05 15:22:47 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,25 +64,25 @@ static void	init(t_game *game)
 }
 
 /* Main function */
-static void debug_prints(t_game game)
-{
-	ft_printf("NO: %s\n", game.textures->NO);
-	ft_printf("SO: %s\n", game.textures->SO);
-	ft_printf("WE: %s\n", game.textures->WE);
-	ft_printf("EA: %s\n", game.textures->EA);
-	ft_printf("F: %d\n", game.textures->F);
-	ft_printf("C: %d\n", game.textures->C);
+// static void debug_prints(t_game game)
+// {
+// 	ft_printf("NO: %s\n", game.textures->NO);
+// 	ft_printf("SO: %s\n", game.textures->SO);
+// 	ft_printf("WE: %s\n", game.textures->WE);
+// 	ft_printf("EA: %s\n", game.textures->EA);
+// 	ft_printf("F: %d\n", game.textures->F);
+// 	ft_printf("C: %d\n", game.textures->C);
 
-	ft_printf("\n## MAP ARR##\n");
-	for (int i = 0; game.map->arr[i]; i++)
-		ft_printf("%s\n", game.map->arr[i]);
-	ft_printf("\n");
-	ft_printf("map height: %d\n", game.map->height);
-	ft_printf("map width: %d\n", game.map->width);
-	ft_printf("player position x: %d\n", game.map->player_x);
-	ft_printf("player position y: %d\n", game.map->player_y);
-	ft_printf("player direction: %c\n", game.map->player_dir);
-}
+// 	ft_printf("\n## MAP ARR##\n");
+// 	for (int i = 0; game.map->arr[i]; i++)
+// 		ft_printf("%s\n", game.map->arr[i]);
+// 	ft_printf("\n");
+// 	ft_printf("map height: %d\n", game.map->height);
+// 	ft_printf("map width: %d\n", game.map->width);
+// 	ft_printf("player position x: %d\n", game.map->player_x);
+// 	ft_printf("player position y: %d\n", game.map->player_y);
+// 	ft_printf("player direction: %c\n", game.map->player_dir);
+// }
 
 /* Main function */
 int	main(int ac, char **av)
@@ -106,13 +106,10 @@ int	main(int ac, char **av)
 	}
 	debug_prints(game);
 	if (!setup_game(&game))
-  {
+	{
 		cleanup_parsing(&game);
 		return (1);
 	}
-	// conversion of rgb to mlx format -- decide where this fits better
-	game.textures->F = mlx_get_color_value(game.mlx, game.textures->F);
-	game.textures->C = mlx_get_color_value(game.mlx, game.textures->C);
 	if (!init_screen_image(&game))
 	{
 		cleanup_parsing(&game);
