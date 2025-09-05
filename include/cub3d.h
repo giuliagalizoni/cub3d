@@ -52,6 +52,7 @@ typedef struct s_keys
 	int	right;
 }	t_keys;
 
+
 typedef enum e_error
 {
 	ERR_USAGE,
@@ -93,6 +94,15 @@ typedef struct s_img
 	int		width;
 	int		height;
 }	t_img;
+
+typedef struct s_flip_params
+{
+	t_img	*texture;
+	double	wall_x;
+	int		wall_side;
+	double	ray_dir_x;
+	double	ray_dir_y;
+}	t_flip_params;
 
 typedef struct s_textures
 {
@@ -145,6 +155,7 @@ typedef struct s_texture_draw
 	int		tex_x;
 	double	tex_step;
 	double	tex_pos;
+	t_flip_params	flip_params;
 }	t_texture_draw;
 
 typedef struct s_wall_calc
@@ -211,6 +222,7 @@ void	draw_wall_slice_textured(t_game *game, int x, double wall_height,
 		t_ray_data *ray_data);
 int		is_wall(t_game *game, int x, int y);
 void	init_player(t_game *game, double x, double y, char direction);
+void	set_player_direction(t_player *player, char direction);
 void	set_default_colors(t_game *game);
 int		load_texture(t_game *game, t_img *texture, char *path);
 int		load_all_textures(t_game *game);
@@ -221,8 +233,7 @@ t_img	*get_wall_texture_advanced(t_game *game, int wall_side, double ray_angle);
 t_img	*get_wall_texture_by_direction(t_game *game, int wall_side,
 			double ray_dir_x, double ray_dir_y);
 int		calculate_texture_x(t_img *texture, double wall_x);
-int		calculate_texture_x_with_flip(t_img *texture, double wall_x,
-			int wall_side, double ray_dir_x, double ray_dir_y);
+int		calculate_texture_x_with_flip(t_flip_params *params);
 int		calculate_texture_y(t_img *texture, int y, int wall_start,
 			int wall_height);
 int		get_texture_pixel(t_img *texture, int x, int y);

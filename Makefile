@@ -36,11 +36,13 @@ SRCS		= $(SRC_DIR)/main.c \
 		  $(RENDER_DIR)/render.c \
 		  $(RENDER_DIR)/raycasting.c \
 		  $(RENDER_DIR)/wall_drawing.c \
+		  $(RENDER_DIR)/ray_utils.c \
 		  $(INPUT_DIR)/input.c \
 		  $(INPUT_DIR)/movement.c \
 		  $(TEXTURE_DIR)/texture_loader.c \
 		  $(TEXTURE_DIR)/texture_manager.c \
 		  $(TEXTURE_DIR)/texture_utils.c \
+		  $(TEXTURE_DIR)/texture_calc_utils.c \
 		  $(PARSER_DIR)/parser.c \
 		  $(PARSER_DIR)/read_cub.c \
 		  $(PARSER_DIR)/parse_map.c \
@@ -50,6 +52,9 @@ SRCS		= $(SRC_DIR)/main.c \
 		  $(PARSER_DIR)/cleanup.c \
 		  $(UTILS_DIR)/array_utils.c \
 		  $(UTILS_DIR)/string_utils.c \
+		  $(UTILS_DIR)/player_utils.c \
+		  $(UTILS_DIR)/debug_utils.c \
+		  $(UTILS_DIR)/direction_utils.c \
 
 # Object files
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

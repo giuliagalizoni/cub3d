@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 02:00:00 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/05 06:07:51 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/05 07:01:23 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,4 @@ t_img	*get_wall_texture_by_direction(t_game *game, int wall_side,
 		else
 			return (&game->textures->imgs[0]);
 	}
-}
-
-/* Calculate texture X coordinate */
-int	calculate_texture_x(t_img *texture, double wall_x)
-{
-	int	tex_x;
-
-	tex_x = (int)(wall_x * (double)texture->width);
-	if (tex_x < 0)
-		tex_x = 0;
-	else if (tex_x >= texture->width)
-		tex_x = texture->width - 1;
-	return (tex_x);
 }

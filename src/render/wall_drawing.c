@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 06:48:28 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/05 05:43:27 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/05 08:14:55 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,12 @@ void	draw_wall_slice_textured(t_game *game, int x, double wall_height,
 		draw_wall_slice(game, x, wall_height);
 		return ;
 	}
-	draw_data.tex_x = calculate_texture_x_with_flip(draw_data.texture,
-			ray_data->wall_x, ray_data->wall_side, ray_data->ray_dir_x,
-			ray_data->ray_dir_y);
+	draw_data.flip_params.texture = draw_data.texture;
+	draw_data.flip_params.wall_x = ray_data->wall_x;
+	draw_data.flip_params.wall_side = ray_data->wall_side;
+	draw_data.flip_params.ray_dir_x = ray_data->ray_dir_x;
+	draw_data.flip_params.ray_dir_y = ray_data->ray_dir_y;
+	draw_data.tex_x = calculate_texture_x_with_flip(&draw_data.flip_params);
 	draw_data.tex_step = (double)draw_data.texture->height / wall_height;
 	draw_data.tex_pos = (draw_data.start_y - WIN_HEIGHT / 2.0 + wall_height
 			/ 2.0) * draw_data.tex_step;
