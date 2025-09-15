@@ -99,22 +99,10 @@ int	main(int ac, char **av)
 	init_player(&game, game.map->player_x, game.map->player_y,
 		game.map->player_dir);
 
-	if (!init_window(&game))
-	{
-		cleanup_parsing(&game);
-		return (1);
-	}
+	init_window(&game);
 	debug_prints(game);
-	if (!setup_game(&game))
-	{
-		cleanup_parsing(&game);
-		return (1);
-	}
-	if (!init_screen_image(&game))
-	{
-		cleanup_parsing(&game);
-		return (1);
-	}
+	setup_game(&game);
+	init_screen_image(&game);
 	setup_hooks(&game);
 	mlx_loop(game.mlx);
 	cleanup_parsing(&game);

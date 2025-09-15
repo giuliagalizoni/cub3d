@@ -13,28 +13,32 @@
 #include "../../include/cub3d.h"
 
 /* Initialize MLX and create window */
-int	init_window(t_game *game)
+void	init_window(t_game *game)
 {
 	game->mlx = mlx_init();
 	if (!game->mlx)
-		return (0);
+	{
+		error_exit(ERR_MLX_INIT, game, NULL);
+	}
 	game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, "cub3D");
 	if (!game->win)
-		return (0);
-	return (1);
+	{
+		error_exit(ERR_WIN_CREATE, game, NULL);
+	}
 }
 
 /* Initialize screen image buffer */
-int	init_screen_image(t_game *game)
+void	init_screen_image(t_game *game)
 {
 	game->screen.img = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
 	if (!game->screen.img)
-		return (0);
+		error_exit(ERR_IMG_CREATE, game, NULL);
 	game->screen.addr = mlx_get_data_addr(game->screen.img,
 			&game->screen.bits_per_pixel,
 			&game->screen.line_length,
 			&game->screen.endian);
-	return (1);
+	if (!game->screen.addr)
+		error_exit(ERR_IMG_DATA_ADDR, game, NULL);
 }
 
 void	setup_hooks(t_game *game)

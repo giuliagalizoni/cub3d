@@ -13,19 +13,10 @@
 #include "../../include/cub3d.h"
 
 /* Initialize rendering system */
-int	init_rendering(t_game *game)
+void	init_rendering(t_game *game)
 {
-	if (!init_screen_image(game))
-	{
-		ft_printf("Error: Failed to initialize screen image\n");
-		return (0);
-	}
-	if (!load_textures(game))
-	{
-		ft_printf("Error: Failed to load textures\n");
-		return (0);
-	}
-	return (1);
+	init_screen_image(game);
+	load_textures(game);
 }
 
 /* Main rendering function called each frame */

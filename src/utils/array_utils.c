@@ -258,20 +258,10 @@ void	debug_prints(t_game game)
 	ft_printf("player direction: %c\n", game.map->player_dir);
 }
 
-int	setup_game(t_game *game)
+void	setup_game(t_game *game)
 {
 	game->floor_color = mlx_get_color_value(game->mlx, game->textures->f);
 	game->ceiling_color = mlx_get_color_value(game->mlx, game->textures->c);
-	if (!load_all_textures(game))
-	{
-		ft_printf("Error: Failed to load textures\n");
-		cleanup_parsing(game);
-		return (0);
-	}
-	if (!init_screen_image(game))
-	{
-		cleanup_parsing(game);
-		return (0);
-	}
-	return (1);
+	load_all_textures(game);
+	init_screen_image(game);
 }
