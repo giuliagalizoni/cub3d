@@ -69,7 +69,14 @@ typedef enum e_error
 	ERR_DUPLICATE_PLAYER,
 	ERR_MISSING_PLAYER,
 	ERR_MAP_NOT_CLOSED,
-	ERR_SYSTEM
+	ERR_SYSTEM,
+	/* Rendering / MLX errors */
+	ERR_MLX_INIT,
+	ERR_WIN_CREATE,
+	ERR_IMG_CREATE,
+	ERR_IMG_DATA_ADDR,
+	ERR_XPM_LOAD,
+	ERR_HOOK_SETUP
 }	t_error;
 
 /* Player structure */
@@ -181,12 +188,12 @@ void	validade_map(t_game *game);
 
 /* Function prototypes - Window management */
 
-int		init_window(t_game *game);
+void	init_window(t_game *game);
 int		close_window(t_game *game);
 void	cleanup_game(t_game *game);
 void	debug_prints(t_game game);
-int		setup_game(t_game *game);
-int		init_rendering(t_game *game);
+void	setup_game(t_game *game);
+void	init_rendering(t_game *game);
 int		render_frame(t_game *game);
 void	clear_image(t_img *img, int color);
 void	put_pixel(t_img *img, int x, int y, int color);
@@ -201,7 +208,7 @@ void	rotate_left(t_game *game);
 void	rotate_right(t_game *game);
 int		is_valid_position(t_game *game, double x, double y);
 int		check_collision(t_game *game, double x, double y);
-int		init_screen_image(t_game *game);
+void	init_screen_image(t_game *game);
 void	setup_hooks(t_game *game);
 void	draw_floor_ceiling(t_game *game);
 void	cast_rays(t_game *game);
@@ -217,9 +224,9 @@ int		is_wall(t_game *game, int x, int y);
 void	init_player(t_game *game, double x, double y, char direction);
 void	set_default_colors(t_game *game);
 
-int		load_texture(t_game *game, t_img *texture, char *path);
-int		load_all_textures(t_game *game);
-int		load_textures(t_game *game);
+void	load_texture(t_game *game, t_img *texture, char *path);
+void	load_all_textures(t_game *game);
+void	load_textures(t_game *game);
 void	free_textures(t_game *game);
 t_img	*get_wall_texture(t_game *game, int wall_side);
 t_img	*get_wall_texture_advanced(t_game *game, int wall_side, double ray_angle);
