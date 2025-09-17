@@ -36,6 +36,7 @@ SRCS		= $(SRC_DIR)/main.c \
 		  $(RENDER_DIR)/render.c \
 		  $(RENDER_DIR)/raycasting.c \
 		  $(RENDER_DIR)/wall_drawing.c \
+		  $(RENDER_DIR)/minimap.c \
 		  $(INPUT_DIR)/input.c \
 		  $(INPUT_DIR)/movement.c \
 		  $(TEXTURE_DIR)/texture_loader.c \

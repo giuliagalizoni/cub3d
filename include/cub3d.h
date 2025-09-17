@@ -171,6 +171,7 @@ typedef struct s_game
 	void		*mlx;
 	void		*win;
 	t_img		screen;
+	t_img		minimap;
 	t_player	*player;
 	t_keys		keys;
 	t_map		*map;
@@ -251,5 +252,10 @@ void	error_exit(t_error err_code, t_game *game, char *context);
 int		arr_size(char **arr);
 int		is_equal(char *str1, char *str2);
 char	*get_first_word(char *line);
+
+/* minimap */
+void	init_minimap(t_game *game);
+void	update_minimap(t_game *game);
+void	draw_minimap(t_game *game);
 
 #endif

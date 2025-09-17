@@ -103,6 +103,7 @@ int	main(int ac, char **av)
 	debug_prints(game);
 	setup_game(&game);
 	init_screen_image(&game);
+	init_minimap(&game);
 	setup_hooks(&game);
 	mlx_loop(game.mlx);
 	cleanup_parsing(&game);

@@ -25,6 +25,7 @@ int	render_frame(t_game *game)
 	update_movement(game);
 	draw_floor_ceiling(game);
 	cast_rays(game);
+	draw_minimap(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->screen.img, 0, 0);
 	return (0);
 }
