@@ -22,11 +22,24 @@ void	init_rendering(t_game *game)
 /* Main rendering function called each frame */
 int	render_frame(t_game *game)
 {
+	int pad;
+    int x;
+    int y;
+
 	update_movement(game);
 	draw_floor_ceiling(game);
 	cast_rays(game);
 	draw_minimap(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->screen.img, 0, 0);
+
+	pad = 100;
+    x = WIN_WIDTH - game->minimap.width - pad;
+    y = WIN_HEIGHT - game->minimap.height - pad;
+	if (x < 0)
+		x = 0;
+	if (y < 0)
+		y = 0;
+	mlx_put_image_to_window(game->mlx, game->win, game->minimap.img, x, y);
 	return (0);
 }
 
