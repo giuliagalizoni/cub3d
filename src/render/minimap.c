@@ -158,6 +158,7 @@ void	draw_minimap(t_game *game)
         }
         y++;
     }
+	draw_minimap_rays(game, game->screen.width);
     fill_tile(&game->minimap,
         (int)((game->player->x) * TILESIZE),
         (int)((game->player->y) * TILESIZE),
