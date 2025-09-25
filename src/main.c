@@ -6,7 +6,7 @@
 /*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 06:10:00 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/05 15:22:47 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/09/25 15:33:47 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,6 @@ int	main(int ac, char **av)
 	setup_hooks(&game);
 	mlx_loop(game.mlx);
 	cleanup_parsing(&game);
+	cleanup_game(&game);
 	return (0);
 }

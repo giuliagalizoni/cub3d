@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:22:55 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/05 05:45:18 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/25 15:36:03 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	setup_hooks(t_game *game)
 /* Close window and exit program */
 int	close_window(t_game *game)
 {
+	cleanup_parsing(game);
 	cleanup_game(game);
 	exit(0);
 	return (0);
