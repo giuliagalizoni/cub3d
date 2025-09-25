@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:23:08 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/04 18:58:11 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/25 15:26:20 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,18 @@ void	init_rendering(t_game *game)
 /* Main rendering function called each frame */
 int	render_frame(t_game *game)
 {
-	int pad;
-    int x;
-    int y;
+	int	pad;
+	int	x;
+	int	y;
 
 	update_movement(game);
 	draw_floor_ceiling(game);
 	cast_rays(game);
 	draw_minimap(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->screen.img, 0, 0);
-
 	pad = 100;
-    x = WIN_WIDTH - game->minimap.width - pad;
-    y = WIN_HEIGHT - game->minimap.height - pad;
+	x = WIN_WIDTH - game->minimap.width - pad;
+	y = WIN_HEIGHT - game->minimap.height - pad;
 	if (x < 0)
 		x = 0;
 	if (y < 0)

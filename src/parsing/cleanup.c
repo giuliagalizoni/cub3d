@@ -6,7 +6,6 @@ void	free_arr(char **arr)
 
 	if (!arr)
 		return ;
-
 	i = 0;
 	while (arr[i])
 	{
@@ -22,7 +21,6 @@ void	exhaust_gnl(int fd)
 
 	if (fd < 0)
 		return ;
-
 	temp = get_next_line(fd);
 	while (temp)
 	{
@@ -36,7 +34,6 @@ void	cleanup_parsing(t_game *game)
 {
 	if (!game)
 		return ;
-
 	if (game->map)
 	{
 		if (game->map->arr)

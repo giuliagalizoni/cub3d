@@ -15,7 +15,7 @@ static char	*read_config(int fd, t_game *game)
 	int		result;
 
 	line = get_next_line(fd);
-	while(line)
+	while (line)
 	{
 		result = parse_config_line(line, game);
 		if (result == -1)

@@ -73,6 +73,14 @@ static char	**push_to_arr(char **arr, int size, char *line)
 	return (new_arr);
 }
 
+void	handle_empty_line(char *line, char *first_line, t_game *game, int fd)
+{
+	free(first_line);
+	free(line);
+	exhaust_gnl(fd);
+	error_exit(ERR_EMPTY_LINE_MAP, game, NULL);
+}
+
 void	parse_map(int fd, char *first_line, t_game *game)
 {
 	char	*line;
@@ -86,12 +94,7 @@ void	parse_map(int fd, char *first_line, t_game *game)
 	while (line)
 	{
 		if (line[0] == '\n')
-		{
-			free(first_line);
-			free(line);
-			exhaust_gnl(fd);
-			error_exit(ERR_EMPTY_LINE_MAP, game, NULL);
-		}
+			handle_empty_line(line, first_line, game, fd);
 		game->map->arr = push_to_arr(game->map->arr, size++, line);
 		if (!game->map->arr)
 			error_exit(ERR_MALLOC, game, "parse_map");
