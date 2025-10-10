@@ -121,11 +121,13 @@ void	init_player(t_game *game, double x, double y, char direction)
 
 void	cleanup_game(t_game *game)
 {
+	if (game->minimap.img && game->mlx)
+		mlx_destroy_image(game->mlx, game->minimap.img);
 	if (game->textures && game->textures->loaded)
 		free_textures(game);
-	if (game->screen.img)
+	if (game->screen.img && game->mlx)
 		mlx_destroy_image(game->mlx, game->screen.img);
-	if (game->win)
+	if (game->win && game->mlx)
 		mlx_destroy_window(game->mlx, game->win);
 }
 

@@ -57,6 +57,7 @@ static void	init(t_game *game)
 	if (!game->player)
 		error_exit(ERR_MALLOC, game, "player");
 	game->screen.img = NULL;
+	game->minimap.img = NULL;
 	game->win = NULL;
 	init_textures(game);
 	init_map(game);
@@ -102,7 +103,6 @@ int	main(int ac, char **av)
 	init_window(&game);
 	debug_prints(game);
 	setup_game(&game);
-	init_screen_image(&game);
 	init_minimap(&game);
 	setup_hooks(&game);
 	mlx_loop(game.mlx);

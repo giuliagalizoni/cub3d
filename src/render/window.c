@@ -52,8 +52,8 @@ void	setup_hooks(t_game *game)
 /* Close window and exit program */
 int	close_window(t_game *game)
 {
-	cleanup_parsing(game);
 	cleanup_game(game);
+	cleanup_parsing(game);
 	exit(0);
 	return (0);
 }
