@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 06:10:00 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/25 15:33:47 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/10/13 13:13:12 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
-
 
 static void	init_textures(t_game *game)
 {
@@ -99,7 +98,6 @@ int	main(int ac, char **av)
 	parser(av[1], &game);
 	init_player(&game, game.map->player_x, game.map->player_y,
 		game.map->player_dir);
-
 	init_window(&game);
 	debug_prints(game);
 	setup_game(&game);

@@ -52,6 +52,11 @@ SRCS		= $(SRC_DIR)/main.c \
 		  $(PARSER_DIR)/error_exit.c \
 		  $(UTILS_DIR)/array_utils.c \
 		  $(UTILS_DIR)/string_utils.c \
+		  $(UTILS_DIR)/ray_utils.c \
+		  $(UTILS_DIR)/player_utils.c \
+		  $(UTILS_DIR)/collision_utils.c \
+		  $(UTILS_DIR)/texture_utils.c \
+		  $(UTILS_DIR)/game_utils.c \
 
 # Object files
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
