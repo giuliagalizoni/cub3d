@@ -6,7 +6,7 @@
 /*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:49:02 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/10/13 11:49:38 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/10/13 14:25:52 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	ft_perror(t_error err_code, char *context)
 void	error_exit(t_error err_code, t_game *game, char *context)
 {
 	ft_perror(err_code, context);
-	cleanup_parsing(game);
 	cleanup_game(game);
+	cleanup_parsing(game);
 	exit(EXIT_FAILURE);
 }

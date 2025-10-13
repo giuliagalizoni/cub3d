@@ -6,7 +6,7 @@
 /*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:54:29 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/10/13 13:56:20 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/10/13 14:25:50 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	cleanup_game(t_game *game)
 	{
 		mlx_destroy_display(game->mlx);
 		free(game->mlx);
+		game->mlx = NULL;
 	}
 }
 
