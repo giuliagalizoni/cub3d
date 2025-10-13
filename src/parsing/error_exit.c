@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_exit.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/13 11:49:02 by ggalizon          #+#    #+#             */
+/*   Updated: 2025/10/13 11:49:38 by ggalizon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3d.h"
 
 static void	populate_core_errors(char **messages)
@@ -16,7 +28,8 @@ static void	populate_core_errors(char **messages)
 	messages[ERR_INVALID_CHAR_MAP] = "Map contains an invalid character";
 	messages[ERR_DUPLICATE_PLAYER] = "Map contains more than one player "
 		"start position";
-	messages[ERR_MISSING_PLAYER] = "Map does not contain a player start position";
+	messages[ERR_MISSING_PLAYER] = "Map does not contain a player "
+		"start position";
 	messages[ERR_MAP_NOT_CLOSED] = "Map is not enclosed by walls";
 	messages[ERR_SYSTEM] = NULL;
 }
@@ -68,6 +81,6 @@ void	error_exit(t_error err_code, t_game *game, char *context)
 {
 	ft_perror(err_code, context);
 	cleanup_parsing(game);
-	cleanup_game(game); // do we need this?
+	cleanup_game(game);
 	exit(EXIT_FAILURE);
 }

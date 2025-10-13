@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   array_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/13 11:54:29 by ggalizon          #+#    #+#             */
+/*   Updated: 2025/10/13 11:56:38 by ggalizon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3d.h"
 
 int	arr_size(char **arr)
@@ -220,7 +232,7 @@ t_img	*get_wall_texture_by_type(t_game *game, char wall_type,
 		return (base_texture);
 }
 
-int	calculate_texture_x_with_flip(t_img *texture, double wall_x,
+int	calculate_texture_x_with_flip(t_img *texture, double wall_x, //need to figure out norminette for this function
 		int wall_side, double ray_dir_x, double ray_dir_y)
 {
 	int	tex_x;

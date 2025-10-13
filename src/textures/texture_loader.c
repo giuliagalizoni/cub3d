@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_loader.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 02:00:00 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/05 06:12:48 by shutan           ###   ########.fr       */
+/*   Updated: 2025/10/13 11:54:05 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	load_texture(t_game *game, t_img *texture, char *path)
 void	load_all_textures(t_game *game)
 {
 	if (game->textures->loaded)
-		return;
+		return ;
 	load_texture(game, &game->textures->imgs[0], game->textures->no);
 	load_texture(game, &game->textures->imgs[1], game->textures->so);
 	load_texture(game, &game->textures->imgs[2], game->textures->we);
