@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:54:54 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/10/13 13:41:30 by shutan           ###   ########.fr       */
+/*   Updated: 2025/10/13 18:22:19 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ typedef struct s_game
 
 void	parser(char *path, t_game *game);
 void	read_cub(char *path, t_game *game);
-int		parse_config_line(char *line, t_game *game);
+int		parse_config_line(char *line, t_game *game, int fd);
 void	parse_map(int fd, char *first_line, t_game *game);
 void	scan_map(t_map *map, t_game *game);
 void	validade_map(t_game *game);

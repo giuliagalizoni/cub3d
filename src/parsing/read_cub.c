@@ -6,7 +6,7 @@
 /*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:50:14 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/10/13 11:50:15 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/10/13 18:22:19 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	*read_config(int fd, t_game *game)
 	line = get_next_line(fd);
 	while (line)
 	{
-		result = parse_config_line(line, game);
+		result = parse_config_line(line, game, fd);
 		if (result == -1)
 			return (line);
 		free(line);
