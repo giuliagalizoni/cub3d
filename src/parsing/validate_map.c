@@ -6,7 +6,7 @@
 /*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:53:20 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/10/13 11:53:29 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/10/13 17:09:16 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,44 @@ int	flood_fill(char **map_copy, int x, int y, t_map *map)
 	return (1);
 }
 
+int	is_valid_neighbor(t_map *map, int x, int y)
+{
+	if (y < 0 || y >= map->height || x < 0 || x >= (int)ft_strlen(map->arr[y]))
+		return (0);
+	if (map->arr[y][x] == ' ')
+		return (0);
+	return (1);
+}
+
+int	check_surrounding_walls(t_map *map)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < map->height)
+	{
+		x = 0;
+		while (map->arr[y][x])
+		{
+			if (map->arr[y][x] == '0')
+			{
+				if (!is_valid_neighbor(map, x - 1, y))
+					return (0);
+				if (!is_valid_neighbor(map, x + 1, y))
+					return (0);
+				if (!is_valid_neighbor(map, x, y - 1))
+					return (0);
+				if (!is_valid_neighbor(map, x, y + 1))
+					return (0);
+			}
+			x++;
+		}
+		y++;
+	}
+	return (1);
+}
+
 void	validade_map(t_game *game)
 {
 	char	**map_copy;
@@ -61,6 +99,8 @@ void	validade_map(t_game *game)
 
 	map = game->map;
 	scan_map(map, game);
+	if (!check_surrounding_walls(map))
+		error_exit(ERR_MAP_NOT_CLOSED, game, NULL);
 	map_copy = copy_arr(map->arr, map->height, game);
 	if (!flood_fill(map_copy, map->player_x, map->player_y, map))
 	{
