@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:54:29 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/10/13 13:12:49 by shutan           ###   ########.fr       */
+/*   Updated: 2025/10/13 13:56:20 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	cleanup_game(t_game *game)
 {
+	if (!game)
+		return ;
 	if (game->minimap.img && game->mlx)
 		mlx_destroy_image(game->mlx, game->minimap.img);
 	if (game->textures && game->textures->loaded)
@@ -22,6 +24,11 @@ void	cleanup_game(t_game *game)
 		mlx_destroy_image(game->mlx, game->screen.img);
 	if (game->win && game->mlx)
 		mlx_destroy_window(game->mlx, game->win);
+	if (game->mlx)
+	{
+		mlx_destroy_display(game->mlx);
+		free(game->mlx);
+	}
 }
 
 static void	print_texture_info(t_game game)
