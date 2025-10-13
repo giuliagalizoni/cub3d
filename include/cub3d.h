@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:54:54 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/10/13 11:56:50 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/10/13 13:41:30 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,8 +246,6 @@ t_img	*get_wall_texture_advanced(t_game *game, int wall_side,
 t_img	*get_wall_texture_by_direction(t_game *game, int wall_side,
 			double ray_dir_x, double ray_dir_y);
 int		calculate_texture_x(t_img *texture, double wall_x);
-int		calculate_texture_x_with_flip(t_img *texture, double wall_x,
-			int wall_side, double ray_dir_x, double ray_dir_y); //need to figure out norminette for this function
 int		calculate_texture_y(t_img *texture, int y, int wall_start,
 			int wall_height);
 int		get_texture_pixel(t_img *texture, int x, int y);
