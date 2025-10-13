@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 13:17:37 by shutan            #+#    #+#             */
-/*   Updated: 2025/10/13 18:21:31 by shutan           ###   ########.fr       */
+/*   Updated: 2025/10/13 18:28:15 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ int	check_collision(t_game *game, double x, double y)
 	return (0);
 }
 
-/* 滑动碰撞检测 - 允许沿着墙面滑行 */
-int	check_sliding_collision(t_game *game, double new_x, double new_y, double *final_x, double *final_y)
+static int	check_axis_movement(t_game *game, t_slide_params *params)
 {
 	double	old_x;
 	double	old_y;
@@ -64,37 +63,32 @@ int	check_sliding_collision(t_game *game, double new_x, double new_y, double *fi
 
 	old_x = game->player->x;
 	old_y = game->player->y;
-	
-	/* 检查完整移动是否有碰撞 */
-	if (!check_collision(game, new_x, new_y))
-	{
-		*final_x = new_x;
-		*final_y = new_y;
-		return (0);
-	}
-	
-	/* 分别检查X轴和Y轴移动 */
-	x_collision = check_collision(game, new_x, old_y);
-	y_collision = check_collision(game, old_x, new_y);
-	
-	/* 如果X轴可以移动，Y轴不能移动，只移动X轴 */
+	x_collision = check_collision(game, params->new_x, old_y);
+	y_collision = check_collision(game, old_x, params->new_y);
 	if (!x_collision && y_collision)
 	{
-		*final_x = new_x;
-		*final_y = old_y;
+		params->final_x = params->new_x;
+		params->final_y = old_y;
 		return (0);
 	}
-	
-	/* 如果Y轴可以移动，X轴不能移动，只移动Y轴 */
 	if (x_collision && !y_collision)
 	{
-		*final_x = old_x;
-		*final_y = new_y;
+		params->final_x = old_x;
+		params->final_y = params->new_y;
 		return (0);
 	}
-	
-	/* 如果两个轴都不能移动，保持原位置 */
-	*final_x = old_x;
-	*final_y = old_y;
+	params->final_x = old_x;
+	params->final_y = old_y;
 	return (1);
+}
+
+int	check_sliding_collision(t_game *game, t_slide_params *params)
+{
+	if (!check_collision(game, params->new_x, params->new_y))
+	{
+		params->final_x = params->new_x;
+		params->final_y = params->new_y;
+		return (0);
+	}
+	return (check_axis_movement(game, params));
 }
