@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_cub.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/13 11:50:14 by ggalizon          #+#    #+#             */
+/*   Updated: 2025/10/13 11:50:15 by ggalizon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3d.h"
 
 static int	is_config_all_set(t_game *game)
@@ -15,7 +27,7 @@ static char	*read_config(int fd, t_game *game)
 	int		result;
 
 	line = get_next_line(fd);
-	while(line)
+	while (line)
 	{
 		result = parse_config_line(line, game);
 		if (result == -1)

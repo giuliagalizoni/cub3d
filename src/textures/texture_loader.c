@@ -3,56 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   texture_loader.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 02:00:00 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/05 06:12:48 by shutan           ###   ########.fr       */
+/*   Updated: 2025/10/13 11:54:05 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
 /* Load a single texture from XPM file */
-int	load_texture(t_game *game, t_img *texture, char *path)
+void	load_texture(t_game *game, t_img *texture, char *path)
 {
 	if (!path)
-		return (0);
+		error_exit(ERR_MISSING_CONFIG, game, "texture path");
 	texture->img = mlx_xpm_file_to_image(game->mlx, path,
 			&texture->width, &texture->height);
 	if (!texture->img)
-	{
-		ft_printf("Error: Failed to load texture: %s\n", path);
-		return (0);
-	}
+		error_exit(ERR_XPM_LOAD, game, path);
 	texture->addr = mlx_get_data_addr(texture->img,
 			&texture->bits_per_pixel, &texture->line_length, &texture->endian);
 	if (!texture->addr)
 	{
 		mlx_destroy_image(game->mlx, texture->img);
-		return (0);
+		error_exit(ERR_IMG_DATA_ADDR, game, NULL);
 	}
-	return (1);
 }
 
 /* Load all textures for the game */
-int	load_all_textures(t_game *game)
+void	load_all_textures(t_game *game)
 {
 	if (game->textures->loaded)
-		return (1);
-	if (!load_texture(game, &game->textures->imgs[0], game->textures->no))
-		return (0);
-	if (!load_texture(game, &game->textures->imgs[1], game->textures->so))
-		return (0);
-	if (!load_texture(game, &game->textures->imgs[2], game->textures->we))
-		return (0);
-	if (!load_texture(game, &game->textures->imgs[3], game->textures->ea))
-		return (0);
+		return ;
+	load_texture(game, &game->textures->imgs[0], game->textures->no);
+	load_texture(game, &game->textures->imgs[1], game->textures->so);
+	load_texture(game, &game->textures->imgs[2], game->textures->we);
+	load_texture(game, &game->textures->imgs[3], game->textures->ea);
 	game->textures->loaded = 1;
-	return (1);
 }
 
 /* Load all textures from file paths */
-static int	load_single_texture(t_game *game, int index, char *path)
+static void	load_single_texture(t_game *game, int index, char *path)
 {
 	int	width;
 	int	height;
@@ -60,10 +51,7 @@ static int	load_single_texture(t_game *game, int index, char *path)
 	game->textures->imgs[index].img = mlx_xpm_file_to_image(game->mlx,
 			path, &width, &height);
 	if (!game->textures->imgs[index].img)
-	{
-		ft_printf("Error: Failed to load texture: %s\n", path);
-		return (0);
-	}
+		error_exit(ERR_XPM_LOAD, game, path);
 	game->textures->imgs[index].width = width;
 	game->textures->imgs[index].height = height;
 	game->textures->imgs[index].addr = mlx_get_data_addr(
@@ -71,36 +59,20 @@ static int	load_single_texture(t_game *game, int index, char *path)
 			&game->textures->imgs[index].bits_per_pixel,
 			&game->textures->imgs[index].line_length,
 			&game->textures->imgs[index].endian);
-	return (1);
 }
 
-int	load_textures(t_game *game)
+void	load_textures(t_game *game)
 {
 	if (!game->textures->no || !game->textures->so
 		|| !game->textures->we || !game->textures->ea)
 	{
-		ft_printf("Error: Missing texture paths\n");
-		return (0);
+		error_exit(ERR_MISSING_CONFIG, game, "texture paths");
 	}
-	if (!load_single_texture(game, 0, game->textures->no))
-		return (0);
-	if (!load_single_texture(game, 1, game->textures->so))
-	{
-		free_textures(game);
-		return (0);
-	}
-	if (!load_single_texture(game, 2, game->textures->we))
-	{
-		free_textures(game);
-		return (0);
-	}
-	if (!load_single_texture(game, 3, game->textures->ea))
-	{
-		free_textures(game);
-		return (0);
-	}
+	load_single_texture(game, 0, game->textures->no);
+	load_single_texture(game, 1, game->textures->so);
+	load_single_texture(game, 2, game->textures->we);
+	load_single_texture(game, 3, game->textures->ea);
 	game->textures->loaded = 1;
-	return (1);
 }
 
 /* Free all loaded textures */

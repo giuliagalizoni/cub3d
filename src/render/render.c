@@ -3,38 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:23:08 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/04 18:58:11 by shutan           ###   ########.fr       */
+/*   Updated: 2025/09/25 15:26:20 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
 /* Initialize rendering system */
-int	init_rendering(t_game *game)
+void	init_rendering(t_game *game)
 {
-	if (!init_screen_image(game))
-	{
-		ft_printf("Error: Failed to initialize screen image\n");
-		return (0);
-	}
-	if (!load_textures(game))
-	{
-		ft_printf("Error: Failed to load textures\n");
-		return (0);
-	}
-	return (1);
+	init_screen_image(game);
+	load_textures(game);
 }
 
 /* Main rendering function called each frame */
 int	render_frame(t_game *game)
 {
+	int	pad;
+	int	x;
+	int	y;
+
 	update_movement(game);
 	draw_floor_ceiling(game);
 	cast_rays(game);
+	draw_minimap(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->screen.img, 0, 0);
+	pad = 100;
+	x = WIN_WIDTH - game->minimap.width - pad;
+	y = WIN_HEIGHT - game->minimap.height - pad;
+	if (x < 0)
+		x = 0;
+	if (y < 0)
+		y = 0;
+	mlx_put_image_to_window(game->mlx, game->win, game->minimap.img, x, y);
 	return (0);
 }
 

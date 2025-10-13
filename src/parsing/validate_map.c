@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validate_map.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/13 11:53:20 by ggalizon          #+#    #+#             */
+/*   Updated: 2025/10/13 11:53:29 by ggalizon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3d.h"
 
 char	**copy_arr(char **arr, int size, t_game *game)
@@ -21,7 +33,6 @@ char	**copy_arr(char **arr, int size, t_game *game)
 	new_arr[size] = NULL;
 	return (new_arr);
 }
-
 
 int	flood_fill(char **map_copy, int x, int y, t_map *map)
 {
