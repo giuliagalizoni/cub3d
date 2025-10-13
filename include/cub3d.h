@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:54:54 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/10/13 18:28:05 by shutan           ###   ########.fr       */
+/*   Updated: 2025/10/13 18:29:45 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,14 @@ typedef struct s_game
 	int			ceiling_color;
 }	t_game;
 
+typedef struct s_slide_params
+{
+	double	new_x;
+	double	new_y;
+	double	final_x;
+	double	final_y;
+}	t_slide_params;
+
 void	parser(char *path, t_game *game);
 void	read_cub(char *path, t_game *game);
 int		parse_config_line(char *line, t_game *game);
@@ -220,14 +228,6 @@ void	rotate_left(t_game *game);
 void	rotate_right(t_game *game);
 int		is_valid_position(t_game *game, double x, double y);
 int		check_collision(t_game *game, double x, double y);
-typedef struct s_slide_params
-{
-	double	new_x;
-	double	new_y;
-	double	final_x;
-	double	final_y;
-}	t_slide_params;
-
 int		check_sliding_collision(t_game *game, t_slide_params *params);
 void	init_screen_image(t_game *game);
 void	setup_hooks(t_game *game);
