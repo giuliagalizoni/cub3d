@@ -12,11 +12,27 @@
 
 #include "../../include/cub3d.h"
 
+/* Check if texture file exists and is readable */
+static int	validate_texture_file(char *path)
+{
+	int		fd;
+
+	if (!path)
+		return (0);
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		return (0);
+	close(fd);
+	return (1);
+}
+
 /* Load a single texture from XPM file */
 void	load_texture(t_game *game, t_img *texture, char *path)
 {
 	if (!path)
 		error_exit(ERR_MISSING_CONFIG, game, "texture path");
+	if (!validate_texture_file(path))
+		error_exit(ERR_XPM_LOAD, game, path);
 	texture->img = mlx_xpm_file_to_image(game->mlx, path,
 			&texture->width, &texture->height);
 	if (!texture->img)
@@ -35,6 +51,14 @@ void	load_all_textures(t_game *game)
 {
 	if (game->textures->loaded)
 		return ;
+	if (!validate_texture_file(game->textures->no))
+		error_exit(ERR_XPM_LOAD, game, game->textures->no);
+	if (!validate_texture_file(game->textures->so))
+		error_exit(ERR_XPM_LOAD, game, game->textures->so);
+	if (!validate_texture_file(game->textures->we))
+		error_exit(ERR_XPM_LOAD, game, game->textures->we);
+	if (!validate_texture_file(game->textures->ea))
+		error_exit(ERR_XPM_LOAD, game, game->textures->ea);
 	load_texture(game, &game->textures->imgs[0], game->textures->no);
 	load_texture(game, &game->textures->imgs[1], game->textures->so);
 	load_texture(game, &game->textures->imgs[2], game->textures->we);
@@ -48,6 +72,8 @@ static void	load_single_texture(t_game *game, int index, char *path)
 	int	width;
 	int	height;
 
+	if (!validate_texture_file(path))
+		error_exit(ERR_XPM_LOAD, game, path);
 	game->textures->imgs[index].img = mlx_xpm_file_to_image(game->mlx,
 			path, &width, &height);
 	if (!game->textures->imgs[index].img)
