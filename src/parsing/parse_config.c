@@ -48,10 +48,30 @@ static int	set_rgb(t_game *game, int *field, char *rgb_str)
 	return (1);
 }
 
+static int	check_texture_ext(char *path)
+{
+	int	len;
+
+	len = ft_strlen(path);
+	if (len <= 4)
+		return (0);
+	if (path[len - 4] != '.')
+		return (0);
+	if (path[len - 3] != 'x')
+		return (0);
+	if (path[len - 2] != 'p')
+		return (0);
+	if (path[len - 1] != 'm')
+		return (0);
+	return (1);
+}
+
 static int	set_texture(char **field, char *path)
 {
 	if (*field)
 		return (-2);
+	if (!check_texture_ext(path))
+		return (-4);
 	*field = ft_strdup(path);
 	if (!*field)
 		return (-3);
@@ -115,6 +135,12 @@ int	parse_config_line(char *line, t_game *game, int fd)
 		free(line);
 		exhaust_gnl(fd);
 		error_exit(ERR_MALLOC, game, NULL);
+	}
+	if (result == -4)
+	{
+		free(line);
+		exhaust_gnl(fd);
+		error_exit(ERR_FILE_EXT, game, NULL);
 	}
 	if (result == 0)
 		return (-1);
