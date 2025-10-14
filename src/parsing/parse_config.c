@@ -6,7 +6,7 @@
 /*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:49:47 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/10/13 18:24:55 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/10/14 13:31:54 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static int	parse_rgb(char *rgb_str, t_game *game)
 	{
 		if (rgb_arr)
 			free_arr(rgb_arr);
-		error_exit(ERR_INVALID_RGB, game, rgb_str);
+		return (-1);
+		// error_exit(ERR_INVALID_RGB, game, rgb_str);
 	}
 	r = ft_atoi(rgb_arr[0]);
 	g = ft_atoi(rgb_arr[1]);
