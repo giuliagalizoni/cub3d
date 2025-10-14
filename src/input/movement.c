@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 18:38:59 by shutan            #+#    #+#             */
-/*   Updated: 2025/09/05 06:01:03 by shutan           ###   ########.fr       */
+/*   Updated: 2025/10/13 18:28:43 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,25 @@
 /* Move player to the left (strafe) */
 void	move_left(t_game *game)
 {
-	double	new_x;
-	double	new_y;
+	t_slide_params	params;
 
-	new_x = game->player->x + game->player->dy * MOVE_SPEED;
-	new_y = game->player->y - game->player->dx * MOVE_SPEED;
-	if (!check_collision(game, new_x, new_y))
-	{
-		game->player->x = new_x;
-		game->player->y = new_y;
-	}
+	params.new_x = game->player->x + game->player->dy * MOVE_SPEED;
+	params.new_y = game->player->y - game->player->dx * MOVE_SPEED;
+	check_sliding_collision(game, &params);
+	game->player->x = params.final_x;
+	game->player->y = params.final_y;
 }
 
 /* Move player to the right (strafe) */
 void	move_right(t_game *game)
 {
-	double	new_x;
-	double	new_y;
+	t_slide_params	params;
 
-	new_x = game->player->x - game->player->dy * MOVE_SPEED;
-	new_y = game->player->y + game->player->dx * MOVE_SPEED;
-	if (!check_collision(game, new_x, new_y))
-	{
-		game->player->x = new_x;
-		game->player->y = new_y;
-	}
+	params.new_x = game->player->x - game->player->dy * MOVE_SPEED;
+	params.new_y = game->player->y + game->player->dx * MOVE_SPEED;
+	check_sliding_collision(game, &params);
+	game->player->x = params.final_x;
+	game->player->y = params.final_y;
 }
 
 /* Rotate player view to the right */
@@ -65,28 +59,22 @@ void	rotate_right(t_game *game)
 
 void	move_forward(t_game *game)
 {
-	double	new_x;
-	double	new_y;
+	t_slide_params	params;
 
-	new_x = game->player->x + game->player->dx * MOVE_SPEED;
-	new_y = game->player->y + game->player->dy * MOVE_SPEED;
-	if (!check_collision(game, new_x, new_y))
-	{
-		game->player->x = new_x;
-		game->player->y = new_y;
-	}
+	params.new_x = game->player->x + game->player->dx * MOVE_SPEED;
+	params.new_y = game->player->y + game->player->dy * MOVE_SPEED;
+	check_sliding_collision(game, &params);
+	game->player->x = params.final_x;
+	game->player->y = params.final_y;
 }
 
 void	move_backward(t_game *game)
 {
-	double	new_x;
-	double	new_y;
+	t_slide_params	params;
 
-	new_x = game->player->x - game->player->dx * MOVE_SPEED;
-	new_y = game->player->y - game->player->dy * MOVE_SPEED;
-	if (!check_collision(game, new_x, new_y))
-	{
-		game->player->x = new_x;
-		game->player->y = new_y;
-	}
+	params.new_x = game->player->x - game->player->dx * MOVE_SPEED;
+	params.new_y = game->player->y - game->player->dy * MOVE_SPEED;
+	check_sliding_collision(game, &params);
+	game->player->x = params.final_x;
+	game->player->y = params.final_y;
 }

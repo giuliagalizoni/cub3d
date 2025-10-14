@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:54:29 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/10/13 14:25:50 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/10/13 18:28:43 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	cleanup_game(t_game *game)
 		mlx_destroy_window(game->mlx, game->win);
 	if (game->mlx)
 	{
-		mlx_destroy_display(game->mlx);
 		free(game->mlx);
 		game->mlx = NULL;
 	}

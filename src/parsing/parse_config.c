@@ -6,21 +6,93 @@
 /*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:49:47 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/10/14 13:35:12 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/10/14 16:13:06 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-static int	parse_rgb(char *rgb_str, t_game *game)
+static int	check_rgb_format(char *rgb_str)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while(rgb_str[i])
+	{
+		if (rgb_str[i] == ',')
+		{
+			if (rgb_str[i + 1] == ',')
+				return (0);
+			count++;
+		}
+		i++;
+	}
+	if (count != 2)
+		return (0);
+	return (1);
+}
+// leaks comming from here
+static int	check_empty_rgb(char **rgb_arr)
+{
+	int	i;
+	int	j;
+	int	not_empty;
+
+	i = 0;
+	while (i < 3)
+	{
+		if (!rgb_arr[i][0])
+			return (0);
+		j = 0;
+		not_empty = 0;
+		while (rgb_arr[i][j])
+		{
+			if (rgb_arr[i][j] != ' ' && rgb_arr[i][j] != '\t')
+				not_empty = 1;
+			j++;
+		}
+		if (!not_empty)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+// static int	check_empty_rgb(char **rgb_arr)
+// {
+//     int		i;
+//     char	*trimmed;
+
+//     i = 0;
+//     while (i < 3)
+//     {
+//         if (!rgb_arr[i][0])
+//             return (0);
+//         trimmed = ft_strtrim(rgb_arr[i], " \t");
+//         if (!trimmed || !trimmed[0])
+//         {
+//             free(trimmed);
+//             return (0);
+//         }
+//         free(trimmed);
+//         i++;
+//     }
+//     return (1);
+// }
+
+static int	parse_rgb(char *rgb_str)
 {
 	int		r;
 	int		g;
 	int		b;
 	char	**rgb_arr;
 
+	if (!check_rgb_format(rgb_str))
+		return (-1);
 	rgb_arr = ft_split(rgb_str, ',');
-	if (!rgb_arr || arr_size(rgb_arr) != 3)
+	if (!rgb_arr || arr_size(rgb_arr) != 3 || !check_empty_rgb(rgb_arr))
 	{
 		if (rgb_arr)
 			free_arr(rgb_arr);
@@ -35,13 +107,13 @@ static int	parse_rgb(char *rgb_str, t_game *game)
 	return ((r << 16) | (g << 8) | b);
 }
 
-static int	set_rgb(t_game *game, int *field, char *rgb_str)
+static int	set_rgb(int *field, char *rgb_str)
 {
 	int	color;
 
 	if (*field != -1)
 		return (-2);
-	color = parse_rgb(rgb_str, game);
+	color = parse_rgb(rgb_str);
 	if (color == -1)
 		return (-1);
 	*field = color;
@@ -91,9 +163,9 @@ static int	set_config_value(t_game *game, char *id, char *value)
 	else if (is_equal(id, "EA"))
 		result = set_texture(&game->textures->ea, value);
 	else if (is_equal(id, "F"))
-		result = set_rgb(game, &game->textures->f, value);
+		result = set_rgb(&game->textures->f, value);
 	else if (is_equal(id, "C"))
-		result = set_rgb(game, &game->textures->c, value);
+		result = set_rgb(&game->textures->c, value);
 	else
 		return (0);
 	return (result);

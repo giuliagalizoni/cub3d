@@ -6,7 +6,7 @@
 /*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 13:17:37 by shutan            #+#    #+#             */
-/*   Updated: 2025/10/13 13:17:38 by shutan           ###   ########.fr       */
+/*   Updated: 2025/10/13 18:28:43 by shutan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,43 @@ int	check_collision(t_game *game, double x, double y)
 	if (!is_valid_position(game, check_x, check_y))
 		return (1);
 	return (0);
+}
+
+static int	check_axis_movement(t_game *game, t_slide_params *params)
+{
+	double	old_x;
+	double	old_y;
+	int		x_collision;
+	int		y_collision;
+
+	old_x = game->player->x;
+	old_y = game->player->y;
+	x_collision = check_collision(game, params->new_x, old_y);
+	y_collision = check_collision(game, old_x, params->new_y);
+	if (!x_collision && y_collision)
+	{
+		params->final_x = params->new_x;
+		params->final_y = old_y;
+		return (0);
+	}
+	if (x_collision && !y_collision)
+	{
+		params->final_x = old_x;
+		params->final_y = params->new_y;
+		return (0);
+	}
+	params->final_x = old_x;
+	params->final_y = old_y;
+	return (1);
+}
+
+int	check_sliding_collision(t_game *game, t_slide_params *params)
+{
+	if (!check_collision(game, params->new_x, params->new_y))
+	{
+		params->final_x = params->new_x;
+		params->final_y = params->new_y;
+		return (0);
+	}
+	return (check_axis_movement(game, params));
 }
