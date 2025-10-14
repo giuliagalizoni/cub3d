@@ -6,137 +6,11 @@
 /*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:49:47 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/10/14 16:13:06 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/10/14 16:55:50 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
-
-static int	check_rgb_format(char *rgb_str)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while(rgb_str[i])
-	{
-		if (rgb_str[i] == ',')
-		{
-			if (rgb_str[i + 1] == ',')
-				return (0);
-			count++;
-		}
-		i++;
-	}
-	if (count != 2)
-		return (0);
-	return (1);
-}
-// leaks comming from here
-static int	check_empty_rgb(char **rgb_arr)
-{
-	int	i;
-	int	j;
-	int	not_empty;
-
-	i = 0;
-	while (i < 3)
-	{
-		if (!rgb_arr[i][0])
-			return (0);
-		j = 0;
-		not_empty = 0;
-		while (rgb_arr[i][j])
-		{
-			if (rgb_arr[i][j] != ' ' && rgb_arr[i][j] != '\t')
-				not_empty = 1;
-			j++;
-		}
-		if (!not_empty)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-// static int	check_empty_rgb(char **rgb_arr)
-// {
-//     int		i;
-//     char	*trimmed;
-
-//     i = 0;
-//     while (i < 3)
-//     {
-//         if (!rgb_arr[i][0])
-//             return (0);
-//         trimmed = ft_strtrim(rgb_arr[i], " \t");
-//         if (!trimmed || !trimmed[0])
-//         {
-//             free(trimmed);
-//             return (0);
-//         }
-//         free(trimmed);
-//         i++;
-//     }
-//     return (1);
-// }
-
-static int	parse_rgb(char *rgb_str)
-{
-	int		r;
-	int		g;
-	int		b;
-	char	**rgb_arr;
-
-	if (!check_rgb_format(rgb_str))
-		return (-1);
-	rgb_arr = ft_split(rgb_str, ',');
-	if (!rgb_arr || arr_size(rgb_arr) != 3 || !check_empty_rgb(rgb_arr))
-	{
-		if (rgb_arr)
-			free_arr(rgb_arr);
-		return (-1);
-	}
-	r = ft_atoi(rgb_arr[0]);
-	g = ft_atoi(rgb_arr[1]);
-	b = ft_atoi(rgb_arr[2]);
-	free_arr(rgb_arr);
-	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-		return (-1);
-	return ((r << 16) | (g << 8) | b);
-}
-
-static int	set_rgb(int *field, char *rgb_str)
-{
-	int	color;
-
-	if (*field != -1)
-		return (-2);
-	color = parse_rgb(rgb_str);
-	if (color == -1)
-		return (-1);
-	*field = color;
-	return (1);
-}
-
-static int	check_texture_ext(char *path)
-{
-	int	len;
-
-	len = ft_strlen(path);
-	if (len <= 4)
-		return (0);
-	if (path[len - 4] != '.')
-		return (0);
-	if (path[len - 3] != 'x')
-		return (0);
-	if (path[len - 2] != 'p')
-		return (0);
-	if (path[len - 1] != 'm')
-		return (0);
-	return (1);
-}
 
 static int	set_texture(char **field, char *path)
 {
@@ -171,6 +45,28 @@ static int	set_config_value(t_game *game, char *id, char *value)
 	return (result);
 }
 
+static void	quit_config(t_game *game, t_error err_code, char *line, int fd)
+{
+	free(line);
+	exhaust_gnl(fd);
+	error_exit(err_code, game, NULL);
+}
+
+static int	handle_config_error(int result, t_game *game, char *line, int fd)
+{
+	if (result == -1)
+		quit_config(game, ERR_INVALID_RGB, line, fd);
+	if (result == -2)
+		quit_config(game, ERR_DUPLICATE_ID, line, fd);
+	if (result == -3)
+		quit_config(game, ERR_MALLOC, line, fd);
+	if (result == -4)
+		quit_config(game, ERR_FILE_EXT, line, fd);
+	if (result == 0)
+		return (-1);
+	return (1);
+}
+
 int	parse_config_line(char *line, t_game *game, int fd)
 {
 	char	*trimmed;
@@ -190,31 +86,5 @@ int	parse_config_line(char *line, t_game *game, int fd)
 	result = set_config_value(game, id, value);
 	free(id);
 	free(trimmed);
-	if (result == -1)
-	{
-		free(line);
-		exhaust_gnl(fd);
-		error_exit(ERR_INVALID_RGB, game, NULL);
-	}
-	if (result == -2)
-	{
-		free(line);
-		exhaust_gnl(fd);
-		error_exit(ERR_DUPLICATE_ID, game, NULL);
-	}
-	if (result == -3)
-	{
-		free(line);
-		exhaust_gnl(fd);
-		error_exit(ERR_MALLOC, game, NULL);
-	}
-	if (result == -4)
-	{
-		free(line);
-		exhaust_gnl(fd);
-		error_exit(ERR_FILE_EXT, game, NULL);
-	}
-	if (result == 0)
-		return (-1);
-	return (1);
+	return (handle_config_error(result, game, line, fd));
 }

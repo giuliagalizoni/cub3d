@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:54:54 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/10/14 15:54:23 by shutan           ###   ########.fr       */
+/*   Updated: 2025/10/14 16:57:31 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,9 @@ int		parse_config_line(char *line, t_game *game, int fd);
 void	parse_map(int fd, char *first_line, t_game *game);
 void	scan_map(t_map *map, t_game *game);
 void	validade_map(t_game *game);
+int		set_rgb(int *field, char *rgb_str);
+int		check_texture_ext(char *path);
+int		validate_texture_file(char *path);
 
 /* Function prototypes - Window management */
 

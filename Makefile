@@ -50,6 +50,7 @@ SRCS		= $(SRC_DIR)/main.c \
 		  $(PARSER_DIR)/scan_map.c \
 		  $(PARSER_DIR)/cleanup.c \
 		  $(PARSER_DIR)/error_exit.c \
+		  $(PARSER_DIR)/parse_rgb.c \
 		  $(UTILS_DIR)/array_utils.c \
 		  $(UTILS_DIR)/string_utils.c \
 		  $(UTILS_DIR)/ray_utils.c \

@@ -6,25 +6,11 @@
 /*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 02:00:00 by shutan            #+#    #+#             */
-/*   Updated: 2025/10/13 11:54:05 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/10/14 16:58:53 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
-
-/* Check if texture file exists and is readable */
-static int	validate_texture_file(char *path)
-{
-	int		fd;
-
-	if (!path)
-		return (0);
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
-		return (0);
-	close(fd);
-	return (1);
-}
 
 /* Load a single texture from XPM file */
 void	load_texture(t_game *game, t_img *texture, char *path)

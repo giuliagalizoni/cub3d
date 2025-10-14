@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shutan <shutan@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 13:17:53 by shutan            #+#    #+#             */
-/*   Updated: 2025/10/13 13:17:59 by shutan           ###   ########.fr       */
+/*   Updated: 2025/10/14 17:03:17 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,22 @@ t_img	*get_wall_texture_by_type(t_game *game, char wall_type,
 		return (&game->textures->imgs[2]);
 	else
 		return (base_texture);
+}
+
+int	check_texture_ext(char *path)
+{
+	int	len;
+
+	len = ft_strlen(path);
+	if (len <= 4)
+		return (0);
+	if (path[len - 4] != '.')
+		return (0);
+	if (path[len - 3] != 'x')
+		return (0);
+	if (path[len - 2] != 'p')
+		return (0);
+	if (path[len - 1] != 'm')
+		return (0);
+	return (1);
 }
